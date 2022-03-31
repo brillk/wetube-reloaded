@@ -1,0 +1,29 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brillk/wetube-reloaded.git"
+  },
+  "keywords": [
+    "1234"
+  ],
+  "author": "KJH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brillk/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/brillk/wetube-reloaded#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11"
+  }
+}
