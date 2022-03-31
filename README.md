@@ -4,19 +4,24 @@
 
 # 도메인 별로 나누자
 
-# Home은 글로벌 라우터 
+# Home은 글로벌 라우터
+
 # 일부 라우트는 url창을 더 깔끔히 만들기 위해 예외를 만들기도 한다
 
 / -> home
-/join -<> Join ✅
-/login -> Login ✅
-/search -> Search ✅
+/join -<> Join 
+/login -> Login 
+/search -> Search 
 
-/users/edit-> Edit User ✅
-/users/delete-> Delete User ✅
+/users/:id -> See User
+/users/logout -> Log Out
+/users/edit -> Edit My Profile
+/users/delete-> Delete User 
 
-/videos/watch -> Watch Video ✅
-/videos/edit -> Edit Video ✅
-/videos/delete -> Delete Video ✅
-/videos/comments -> Write comment ✅
+/videos/:id -> Watch Video
+/videos/:id/edit -> Edit Video
+/videos/:id/delete -> Delete Video
+/videos/upload -> Upload Video
+
+/videos/comments -> Write comment
 /videos/comments/delete -> Delete comment
