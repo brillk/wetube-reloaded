@@ -8,15 +8,15 @@
 # 일부 라우트는 url창을 더 깔끔히 만들기 위해 예외를 만들기도 한다
 
 / -> home
-/join -<> Join
-/login -> Login
-/search -> Search
+/join -<> Join ✅
+/login -> Login ✅
+/search -> Search ✅
 
-/users/edit-> Edit User
-/users/delete-> Delete User
+/users/edit-> Edit User ✅
+/users/delete-> Delete User ✅
 
-/videos/watch -> Watch Video
-/videos/edit -> Edit Video
-/videos/delete -> Delete Video
-/videos/comments -> Write comment
+/videos/watch -> Watch Video ✅
+/videos/edit -> Edit Video ✅
+/videos/delete -> Delete Video ✅
+/videos/comments -> Write comment ✅
 /videos/comments/delete -> Delete comment
