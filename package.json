@@ -20,7 +20,8 @@
   "homepage": "https://github.com/brillk/wetube-reloaded#readme",
   "description": "",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
