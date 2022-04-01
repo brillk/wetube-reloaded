@@ -39,7 +39,10 @@ export const getEdit = (req, res) => {
   return res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
 };
 export const postEdit = (req, res) => {
-    
+  const { id } = req.params;
+  const { title } = req.body;
+  videos[id -1].title = title; //제목 수정하기 -> 이건 진짜로 된건 아님 구동만 할뿐 
+  return res.redirect(`/videos/${id}`);
 };
 
 export const removeVideo = (req, res) => res.render("remove");

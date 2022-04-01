@@ -1,21 +1,12 @@
 import express from "express";
-import {
-  watch,
-  getEdit,
-  postEdit,
-  removeVideo,
-  writeComment,
-  upload,
-} from "../controllers/videoController.js";
+import { watch, getEdit, postEdit } from "../controllers/videoController.js";
 
 const videosRouter = express.Router(); //라우터 만들기
 
-videosRouter.get("/writeComment", writeComment);
-videosRouter.get("/upload", upload);
 videosRouter.get("/:id(\\d+)", watch); //링크를 GET하기
-videosRouter.get("/:id(\\d+)/edit", getEdit);
-videosRouter.post("/:id(\\d+)/edit", postEdit);
-videosRouter.get("/:id(\\d+)/delete", removeVideo);
+videosRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);
+// 2 in 1 두개를 하나로 만들었다
+
 export default videosRouter;
 
 //id는 파라미터다

@@ -12,6 +12,8 @@ app.use(logger);
 
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파일 디렉토리 설정
+app.use(logger);
+app.use(express.urlencoded({ extended: true }));
 app.use("/", globalRouter);
 app.use("/users", usersRouter);
 app.use("/videos", videosRouter);
@@ -29,3 +31,6 @@ app.listen(PORT, handleListening);
 //pug 파일은 현재 디렉토리에 있는 views폴더에서 실행되는데,
 //노드가 시작하는 곳(서버)에서 실행되므로 현재 실행되는 곳은
 //package.json이다 그러므로 현 디렉토리는 wetube가 되었고, 지금은 src라는 디랙토리안에 있다는 걸 알려줘야 한다
+
+//app.use(express.urlencoded({ extended: true }));
+//자바스크립트 object 형식으로 form이 body를 이해하도록 도운다
