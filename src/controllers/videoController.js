@@ -41,17 +41,22 @@ export const getEdit = (req, res) => {
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
-  videos[id -1].title = title; //제목 수정하기 -> 이건 진짜로 된건 아님 구동만 할뿐 
+  videos[id - 1].title = title; //제목 수정하기 -> 이건 진짜로 된건 아님 구동만 할뿐
   return res.redirect(`/videos/${id}`);
 };
 
-export const removeVideo = (req, res) => res.render("remove");
+//more practice
+export const getUpload = (req, res) => {
+  return res.render("upload", { pageTitle: "Upload Video" });
+};
 
-export const search = (req, res) => res.render("search");
-export const upload = (req, res) => res.render("upload");
-
-export const writeComment = (req, res) => res.render("Write Comment");
+export const postUpload = (req, res) => {
+  //add video array
+  return res.redirect("/");
+};
 
 //변수를 제공하는 방법은 render에 파일명을 쓰고 변수를 쓴다. 원하는만큼 넣을 수 있다
 //mixins은 데이터를 받을 수 있는 일종의 미리 만들어진 HTML block 이라 볼 수 있다
 //
+//1. controller를 먼저 만들자
+//2. router를 만들자
