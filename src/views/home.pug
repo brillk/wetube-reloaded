@@ -2,6 +2,8 @@ extends base.pug
   
 
 block content 
-    h1 Home!
-
-
+    h2 Welcome here for trending videos
+    ul
+        each video in videos 
+            li=video
+//- iteration 배열을 출력한다 each는 출력할 변수명 videos는 값이 들어있는 이름 
