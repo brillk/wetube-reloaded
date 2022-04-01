@@ -1,10 +1,9 @@
-doctype html 
-html(lang="ko")
-    head 
-        title Wetube 
-    body 
-        h1 Welcome to Wetube
-    include partials/footer.pug
+extends base.pug
+  
+block head 
+    title Home | Wetube
 
-<!-- 하지만 다른 edit파일을 만든다고 했을떄, 또 html파일을 복붙해야 한다
-  귀찮으니까 그냥 다 변수로 만들까? -->
+block content 
+    h1 Home!
+
+
