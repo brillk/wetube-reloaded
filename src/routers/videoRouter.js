@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  see,
+  watch,
   edit,
   removeVideo,
   writeComment,
@@ -11,7 +11,7 @@ const videosRouter = express.Router(); //라우터 만들기
 
 videosRouter.get("/writeComment", writeComment);
 videosRouter.get("/upload", upload);
-videosRouter.get("/:id(\\d+)", see); //링크를 GET하기
+videosRouter.get("/:id(\\d+)", watch); //링크를 GET하기
 videosRouter.get("/:id(\\d+)/edit", edit);
 videosRouter.get("/:id(\\d+)/delete", removeVideo);
 export default videosRouter;
