@@ -1,10 +1,12 @@
 doctype html 
 html(lang="ko")
     head 
-        block head
+        title #{pageTitle} | Wetube
     body 
         block content 
     include partials/footer.pug
 
 <!-- block이란 개념은 템플릿의 창문처럼 생각하면 된다  -->
 <!--무엇이든 집어넣을 수 있는 공간 -->
+
+<!-- 템플릿으로 어떻게 변수를 보낼까? 컨트롤러가 보내니까 거기서 수정  #{pageTitle}  -->
