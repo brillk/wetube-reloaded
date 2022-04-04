@@ -6,9 +6,11 @@ html(lang="ko")
     body 
         header 
             h1=pageTitle
+            li
+                a(href="/") Home 
         main
-            form(method="POST")
-                input(type="submit" value="Home")
+          
+            
             block content 
     include partials/footer.pug
 

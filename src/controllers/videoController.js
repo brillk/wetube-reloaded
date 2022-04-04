@@ -36,15 +36,23 @@ export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
   //이제 아이디를 읽을 수 있으니 출력해보자
-  //console.log("video")
-
+  if (!video) {
+    return res.render("404", { pageTitle: "Video not found." });
+    //만약 동영상이 없고 null상태라면 404.pug를 보낸다
+  }
   return res.render("watch", { pageTitle: video.title, video });
 };
-export const getEdit = (req, res) => {
+export const getEdit = async (req, res) => {
   const { id } = req.params;
-
-  return res.render("edit", { pageTitle: `Editing: ` });
+  const video = await Video.findById(id);
+  //이제 아이디를 읽을 수 있으니 출력해보자
+  if (!video) {
+    return res.render("404", { pageTitle: "Video not found." });
+    //만약 동영상이 없고 null상태라면 404.pug를 보낸다
+  }
+  return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
 };
+
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
