@@ -1,9 +1,26 @@
 import Video from "../models/Video";
 
-export const home = (req, res) => {
-  //callback과 promise 써보기
-  Video.find({}, (error, videos) => {});
-  return res.render("home", { pageTitle: "Home" });
+/* 
+callback / Video.find({}, (error, videos) => {});
+보통의 콜백 함수는 리턴을 함수로 하고 에러를 또다시 리턴한다
+if (error) {
+  consoel.log("error");
+} else {
+  console.log("Normal");
+}
+호출을 한다면 순서대로 되는 게 아닌 출력 우선순위가 달라져서
+주의하면서 써야한다
+
+promise / async await
+DB를 기다려 준다
+바로 출력이 된다
+오류는 try-catch 구문으로 잡는다
+
+*/
+
+export const home = async (req, res) => {
+  const videos = await Video.find({});
+  return res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = (req, res) => {
   const { id } = req.params;
