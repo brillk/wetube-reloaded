@@ -13,5 +13,5 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
-const Video = mongoose.model("Video", videoSchema);
+const Video = mongoose.model("Video", videoSchema); //1. 데이터의 이름 2. 데이터의 값
 export default Video;

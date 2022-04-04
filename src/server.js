@@ -1,16 +1,11 @@
-import "./db";
-import Video from "./models/Video.js";
 import express from "express";
 import morgan from "morgan";
 import globalRouter from "./routers/globalRouter";
 import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
 
-const PORT = 4000;
-
 const app = express();
 const logger = morgan("dev");
-app.use(logger);
 
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파일 디렉토리 설정
@@ -20,10 +15,7 @@ app.use("/", globalRouter);
 app.use("/users", usersRouter);
 app.use("/videos", videosRouter);
 
-const handleListening = () =>
-  console.log(`✅ Server listening on port http://localhost:${PORT}🦔`);
-
-app.listen(PORT, handleListening);
+export default app;
 
 //각각 독립된 문서를 만들어 export import 해서 더 깔끔한 코드를 만들수 있다
 //pug를 쓰면 html코드를 자동으로 완성해준다

@@ -1,48 +1,25 @@
-let videos = [
-  {
-    title: "First Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2m ago",
-    views: 87,
-    id: 1,
-  },
-  {
-    title: "Second Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2m ago",
-    views: 87,
-    id: 2,
-  },
-  {
-    title: "Third Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2m ago",
-    views: 87,
-    id: 3,
-  },
-];
+import Video from "../models/Video";
 
-export const trending = (req, res) => {
-  return res.render("home", { pageTitle: "Home", videos });
+export const home = (req, res) => {
+  //callback과 promise 써보기
+  Video.find({}, (error, videos) => {});
+  return res.render("home", { pageTitle: "Home" });
 };
 export const watch = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  return res.render("watch", { pageTitle: `Watch: ${video.title}`, video });
+
+  return res.render("watch", { pageTitle: `Watch: ` });
 };
 export const getEdit = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  return res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
+
+  return res.render("edit", { pageTitle: `Editing: ` });
 };
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
-  videos[id - 1].title = title; //제목 수정하기 -> 이건 진짜로 된건 아님 구동만 할뿐
-  return res.redirect(`/videos/${id}`);
+  [id - 1].title = title; //제목 수정하기 -> 이건 진짜로 된건 아님 구동만 할뿐
+  return res.redirect(`//${id}`);
 };
 
 //more practice
@@ -52,15 +29,7 @@ export const getUpload = (req, res) => {
 
 export const postUpload = (req, res) => {
   const { title } = req.body;
-  let newVideo = {
-    title,
-    rating: 0,
-    comments: 0,
-    createdAt: "2m ago",
-    views: 0,
-    id: videos.length + 1,
-  };
-  videos.push(newVideo);
+
   return res.redirect("/");
 };
 
