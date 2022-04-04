@@ -54,14 +54,21 @@ export const getEdit = async (req, res) => {
 export const postEdit = async (req, res) => {
   const { id } = req.params;
   const { title, hashtags, description } = req.body;
-  const video = await Video.findById(id);
+  const video = await Video.exists({ _id: id });
+  //exists 는 필터를 필요로 하고, 어떤것이든 들어갈 수 있다.
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
-  video.title = title;
-  video.description = description;
-  video.hashtags = hashtags.split(",").map(word => word.startsWith('#') ? word :`#${word}`);
-  await video.save();
+  //mongoose가 제공하는 function을 써서 간단하게 줄였다..사실 간단하진 않다..
+  //Video는 model 즉 데이터베이스의 이름이므로 다른 옵션들을 쓸 수 있다
+  //영상을 생성하거나 업뎃 전에 작동할 function의 필요성을 이해
+  await Video.findByIdAndUpdate(id, {
+    title,
+    description,
+    hashtags: hashtags
+      .split(",")
+      .map(word => (word.startsWith("#") ? word : `#${word}`)),
+  });
   return res.redirect(`/videos/${id}`);
 };
 
@@ -76,8 +83,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title,
       description,
-      createdAt: Date.now(),
-      hashtags: hashtags.split(",").map(word => `#${word}`),
+      hashtags,
     });
     return res.redirect("/");
   } catch (error) {

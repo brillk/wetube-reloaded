@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 
 //새로운 db를 만들었다 db에 연결함
-mongoose.connect("mongodb://127.0.0.1:27017/wetube", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect("mongodb://127.0.0.1:27017/wetube");
 
 const db = mongoose.connection;
 const handleOpen = () => console.log("✅ Connected to DB");
