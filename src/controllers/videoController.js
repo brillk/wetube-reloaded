@@ -16,6 +16,13 @@ DB를 기다려 준다
 바로 출력이 된다
 오류는 try-catch 구문으로 잡는다
 
+1. return의 역할 : 본질적인 return의 역할보다는 function을 
+마무리짓는 역할로 사용되고 있음.
+- 이러한 경우 return이 없어도 정상적으로 동작하지만 
+실수를 방지하기 위해 return을 사용
+2. render한 것은 다시 render할 수 없음
+- redirect(), sendStatus(), end() 등등 포함 (express에서 오류 발생)
+
 */
 
 export const home = async (req, res) => {
@@ -45,8 +52,17 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = (req, res) => {
-  const { title } = req.body;
-
+  const { title, description, hashtags } = req.body;
+  const video = new Video({
+    title,
+    description,
+    createdAt: Date.now(),
+    hashtags: hashtags.split(",").map(word => `#${word}`),
+    meta: {
+      views: 0,
+      rating: 0,
+    },
+  });
   return res.redirect("/");
 };
 
