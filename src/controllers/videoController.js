@@ -27,6 +27,7 @@ DB를 기다려 준다
 
 export const home = async (req, res) => {
   const videos = await Video.find({});
+  console.log(videos);
   return res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = (req, res) => {
@@ -51,7 +52,7 @@ export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
 
-export const postUpload = (req, res) => {
+export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
   const video = new Video({
     title,
@@ -63,12 +64,12 @@ export const postUpload = (req, res) => {
       rating: 0,
     },
   });
+  await video.save();
   return res.redirect("/");
 };
 
-export const toHome = (req, res) => {
-  return res.redirect("/");
-};
+//저장을 하는 방법에는 두가지가 있는데 하나는 위처럼 하는거고, 두번째는
+//await Video.create({}) 로 묶어주고, try-catch로 오류를 잡아준다
 
 //변수를 제공하는 방법은 render에 파일명을 쓰고 변수를 쓴다. 원하는만큼 넣을 수 있다
 //mixins은 데이터를 받을 수 있는 일종의 미리 만들어진 HTML block 이라 볼 수 있다
@@ -77,3 +78,15 @@ export const toHome = (req, res) => {
 //2. router를 만들자
 
 //mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀시트로 이루어져 있다
+
+
+//  show dbs
+// admin   0.000GB
+// config  0.000GB
+// local   0.000GB
+// wetube  0.000GB
+//  use wetube
+// switched to db wetube
+//  show collections
+// videos
+// 여기서 콜렉션은 document들의 묶음이다
