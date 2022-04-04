@@ -30,10 +30,15 @@ export const home = async (req, res) => {
   console.log(videos);
   return res.render("home", { pageTitle: "Home", videos });
 };
-export const watch = (req, res) => {
+export const watch = async (req, res) => {
+  //upload를 하면 watch 를 부르기 때문에 오류가 난다
+  //watch.pug를 수정
   const { id } = req.params;
+  const video = await Video.findById(id);
+  //이제 아이디를 읽을 수 있으니 출력해보자
+  //console.log("video")
 
-  return res.render("watch", { pageTitle: `Watch: ` });
+  return res.render("watch", { pageTitle: video.title, video });
 };
 export const getEdit = (req, res) => {
   const { id } = req.params;
