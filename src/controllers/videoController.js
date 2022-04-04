@@ -51,12 +51,27 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = (req, res) => {
-  //add video array
+  const { title } = req.body;
+  let newVideo = {
+    title,
+    rating: 0,
+    comments: 0,
+    createdAt: "2m ago",
+    views: 0,
+    id: videos.length + 1,
+  };
+  videos.push(newVideo);
+  return res.redirect("/");
+};
+
+export const toHome = (req, res) => {
   return res.redirect("/");
 };
 
 //변수를 제공하는 방법은 render에 파일명을 쓰고 변수를 쓴다. 원하는만큼 넣을 수 있다
 //mixins은 데이터를 받을 수 있는 일종의 미리 만들어진 HTML block 이라 볼 수 있다
 //
-//1. controller를 먼저 만들자
+//1. 추가 동작을 넣으려면 controller를 먼저 만들자
 //2. router를 만들자
+
+//mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀시트로 이루어져 있다

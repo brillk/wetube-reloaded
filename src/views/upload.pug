@@ -1,6 +1,7 @@
-extends base
+extends base.pug
 
 block content 
+    h4 Upload Video
     form(method="POST")
-        input(placeholder="Title", required, type="text")
-        input(type="sumbit" value="Upload Video")
+        input(name="title", placeholder="Title", required, type="text")
+        input(type="submit", value="Upload Video")
