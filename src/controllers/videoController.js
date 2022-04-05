@@ -65,9 +65,7 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashtags: hashtags
-      .split(",")
-      .map(word => (word.startsWith("#") ? word : `#${word}`)),
+    hashtags: Video.formatHashtags(hashtags),
   });
   return res.redirect(`/videos/${id}`);
 };
@@ -83,7 +81,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title,
       description,
-      hashtags,
+      hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");
   } catch (error) {
@@ -94,24 +92,26 @@ export const postUpload = async (req, res) => {
   }
 };
 
-//저장을 하는 방법에는 두가지가 있는데 하나는 위처럼 하는거고, 두번째는
-//await Video.create({}) 로 묶어주고, try-catch로 오류를 잡아준다
+/*저장을 하는 방법에는 두가지가 있는데 하나는 위처럼 하는거고, 두번째는
+await Video.create({}) 로 묶어주고, try-catch로 오류를 잡아준다
 
-//변수를 제공하는 방법은 render에 파일명을 쓰고 변수를 쓴다. 원하는만큼 넣을 수 있다
-//mixins은 데이터를 받을 수 있는 일종의 미리 만들어진 HTML block 이라 볼 수 있다
-//
-//1. 추가 동작을 넣으려면 controller를 먼저 만들자
-//2. router를 만들자
+변수를 제공하는 방법은 render에 파일명을 쓰고 변수를 쓴다. 원하는만큼 넣을 수 있다
+mixins은 데이터를 받을 수 있는 일종의 미리 만들어진 HTML block 이라 볼 수 있다
 
-//mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀시트로 이루어져 있다
+1. 추가 동작을 넣으려면 controller를 먼저 만들자
+2. router를 만들자
 
-//  show dbs
-// admin   0.000GB
-// config  0.000GB
-// local   0.000GB
-// wetube  0.000GB
-//  use wetube
-// switched to db wetube
-//  show collections
-// videos
-// 여기서 콜렉션은 document들의 묶음이다
+mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀시트로 이루어져 있다
+
+  show dbs
+ admin   0.000GB
+ config  0.000GB
+ local   0.000GB
+ wetube  0.000GB
+  use wetube
+ switched to db wetube
+  show collections
+ videos
+
+ 여기서 콜렉션은 document들의 묶음이다
+*/

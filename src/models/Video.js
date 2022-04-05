@@ -13,17 +13,22 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
-//this는 우리가 저장하고자 하는 문서를 가리키는 것
-//pre 그러니까 save라는 function이 일어나기 전에
-//지금 무엇을 어떤 걸로 변화시킬수도 있다
-videoSchema.pre("save", async function () {
-  //이렇게 쓰는 이유는
-  //여러 값을 적었을때, 여러개의 값이 담긴 array가 아닌
-  //하나의 값이 담긴 array기때문에
-  this.hashtags = this.hashtags[0]
+/*
+  1. findByIdAndUpdate()에서는 save 훅업, 즉 저장이되지 않는다
+
+  static을 쓰기 위해 필요한 것
+  Schema.static, function, 만들고자 하는 static 이름이다
+  videoController에 쓰인다
+
+  static is way to add function to a mongoose model
+ */
+
+videoSchema.static("formatHashtags", function (hashtags) {
+  return hashtags
     .split(",")
     .map(word => (word.startsWith("#") ? word : `#${word}`));
 });
+
 /* 
 일일히 적기에는 써야할 변수가 많을수도 있으니 디폴트값을 정해주자
  데이터를 세밀하게 적을수록 trim같은 옵션도 사용할 수 있다
