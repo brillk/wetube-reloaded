@@ -115,3 +115,10 @@ mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀
 
  여기서 콜렉션은 document들의 묶음이다
 */
+
+//삭제
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findOneAndDelete(id);
+  return res.redirect("/");
+};
