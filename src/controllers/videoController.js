@@ -26,7 +26,8 @@ DB를 기다려 준다
 */
 
 export const home = async (req, res) => {
-  const videos = await Video.find({});
+  //sort 어떤 방식으로 정렬할 건지 정할수 있다 asc | desc
+  const videos = await Video.find({}).sort({ createdAt: "desc" });
   console.log(videos);
   return res.render("home", { pageTitle: "Home", videos });
 };
@@ -121,4 +122,21 @@ export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   await Video.findOneAndDelete(id);
   return res.redirect("/");
+};
+
+/*
+  라우터로 지정한 :id -> req.params
+  pug파일에서 input으로 받은 내용 -> req.body(form이 POST일 때)
+  pug파일에서 input으로 받은 url내용 -> req.query (form이 GET일 때)
+*/
+
+export const search = (req, res) => {
+  const { keyword } = req.query;
+  //output: search?keyword=new
+  //new는 제목이다 title
+  //if-else when searching video's value is null or undefined
+  if (keyword) {
+    //search
+  }
+  return res.render("search", { pageTitle: "Search" });
 };

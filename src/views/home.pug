@@ -3,10 +3,6 @@ include mixins/video
 
 block content
     h2 Welcome here for trending videos
-        nav 
-            ul 
-                li 
-                    a(href="/videos/upload") Upload Video
                
     each mov in videos 
        +video(mov)

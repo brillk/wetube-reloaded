@@ -12,4 +12,5 @@ usersRouter.get("/logout", logout);
 usersRouter.get("/edit", edit); //링크를 GET하기
 usersRouter.get("/removeUser", removeUser);
 usersRouter.get("/:id(\\d+)", see);
+
 export default usersRouter;
