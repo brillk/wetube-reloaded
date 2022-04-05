@@ -1,6 +1,7 @@
 //import를 한곳에 모아 그걸 문서화
 import "./db";
 import "./models/Video.js";
+import "./models/User.js";
 import app from "./server";
 
 const PORT = 4000;

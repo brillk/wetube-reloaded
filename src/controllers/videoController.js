@@ -28,7 +28,6 @@ DB를 기다려 준다
 export const home = async (req, res) => {
   //sort 어떤 방식으로 정렬할 건지 정할수 있다 asc | desc
   const videos = await Video.find({}).sort({ createdAt: "desc" });
-  console.log(videos);
   return res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = async (req, res) => {
@@ -120,7 +119,7 @@ mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀
 //삭제
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
-  await Video.findOneAndDelete(id);
+  await Video.findByIdAndDelete(id);
   return res.redirect("/");
 };
 
@@ -130,13 +129,22 @@ export const deleteVideo = async (req, res) => {
   pug파일에서 input으로 받은 url내용 -> req.query (form이 GET일 때)
 */
 
-export const search = (req, res) => {
+export const search = async (req, res) => {
   const { keyword } = req.query;
-  //output: search?keyword=new
-  //new는 제목이다 title
-  //if-else when searching video's value is null or undefined
+  let videos = [];
   if (keyword) {
-    //search
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(`${keyword}$`, "i"),
+        //정규식을 써서 keyword가 포함된 제목을 찾게 도와준다
+        //new 는 새로운 object를 만들어 준다
+      },
+    });
   }
-  return res.render("search", { pageTitle: "Search" });
+  return res.render("search", { pageTitle: "Search", videos });
 };
+/*
+  output: search?keyword=new
+  new는 제목이다 title
+  if-else when searching video's value is null or undefined
+  */

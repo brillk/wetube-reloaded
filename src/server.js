@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouter";
+import rootRouter from "./routers/rootRouter";
 import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
 
@@ -11,7 +11,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파일 디렉토리 설정
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
-app.use("/", globalRouter);
+app.use("/", rootRouter);
 app.use("/users", usersRouter);
 app.use("/videos", videosRouter);
 
