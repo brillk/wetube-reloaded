@@ -23,22 +23,47 @@ export const postJoin = async (req, res) => {
   //이메일도 만들어보자
   //$or을 쓰면 둘 중에 하나만 걸려도 에러 메시지를 준다
 
-  await User.create({
-    name,
-    username,
-    email,
-    password,
-    location,
-  });
-  return res.redirect("/login");
+  try {
+    await User.create({
+      name,
+      username,
+      email,
+      password,
+      location,
+    });
+    return res.redirect("/login");
+  } catch (error) {
+    //error 처리하기
+    return res.status(400).render("join", {
+      pageTitle: "Upload Video",
+      errorMessage: error._message,
+    });
+  }
+
   /* 
   만든 정보를 다시 들어가려고 하면 중복된 값이라고 에러가 뜨면서 접속이 되지 않는다
   하지만 에러를 유저에게 보여줘야 어떤 일이 발생했는지 알 수 있기 때문에
   에러 메시지를 만들어 보자
   */
 };
+export const getLogin = (req, res) =>
+  res.render("login", { pageTitle: "Login" });
+export const postLogin = async (req, res) => {
+  const { username, password } = req.body; //로그인할떄 있는 유저인지 확인한다
+  const exists = await User.exists({ username });
+  if (!exists) {
+    return res.status(400).render("login", {
+      pageTitle: "Login",
+      errorMessage: "An account with this username do not exists",
+    });
+  }
+  //check if account exists
+  //check if password correct
+
+  res.end();
+};
+
 export const edit = (req, res) => res.send("Edit User");
 export const removeUser = (req, res) => res.send("Remove User");
-export const login = (req, res) => res.send("Log in User");
 export const logout = (req, res) => res.send("Log out User");
 export const see = (req, res) => res.send("See User");
