@@ -4,6 +4,7 @@ import session from "express-session";
 import rootRouter from "./routers/rootRouter";
 import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
+import { localsMiddleware } from "./middlewares.js";
 
 const app = express();
 const logger = morgan("dev");
@@ -27,11 +28,6 @@ app.use(
 
 4. 세션은 서버측에서 제공해주는 데이터, 
 5. 쿠키는 클라이언트측에서 저장하고 사용하는 데이터
-
-req.sessiontStore() 사용했을때 한번은 undefined가 나온 이유가 세션은 
-서버에서 만들어줘야 하는데 클라이언트가 첫 요청때 세션을 가지고있을리 없으니 undefined이 나온거고 
-그 이후 요청부턴 첫번째 요청때 세션을 만들어서 넘겨줬으니 
-
 클라이언트가 해당 값을 쿠키에 저장하고 매 요청때마다 서버에게 전달
 세션은 서버가 만들어서 제공해주다보니 서버가 재부팅되면 초기화 된다. 
 (그래서 DB에 저장해서 관리를 한다는 소리. 실 운영에선 서버가 꺼지는 일은 없으니깐.)
@@ -40,13 +36,16 @@ req.sessiontStore() 사용했을때 한번은 undefined가 나온 이유가 세�
 서버가 세션을 생성한 기점은 middleware로 express-session을 추가했을때부터 생성됨.
 */
 
-app.use((req, res, next) => {
-  req.sessionStore.all((error, sessions) => {
-    console.log(sessions);
-    next();
-  });
-});
+/*
+local에 들어가서 값을 선언하고 pug파일에 #{선언된 값}을 
+쓰면 template와 pug의 합작품이 나온다
 
+res.locals.sexy = "Me";
+
+title = #{sexy}
+*/
+
+app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/users", usersRouter);
 app.use("/videos", videosRouter);
