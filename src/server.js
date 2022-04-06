@@ -21,8 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: "Hello",
-    resave: true, //방문하는 모든 사용자에게 쿠키를 주는게 아닌 로그인한 한정된 사람한테만 주자, 만약 만명이 한꺼번에 오는데 만개의 쿠키를 주면 서버터진다
-    saveUninitialized: true,
+    resave: false, //방문하는 모든 사용자에게 쿠키를 주는게 아닌 로그인한 한정된 사람한테만 주자, 만약 만명이 한꺼번에 오는데 만개의 쿠키를 주면 서버터진다
+    saveUninitialized: false,
     store: MongoStore.create({ client: mongoose.connection.getClient() }), //db.js에 있는 저장된 url연결
     //원래 session은 memoryStore에 있어서 새로고침하면 사라지는데,
     //현재 session은 mongodb daabase에 저장되어 있다
