@@ -47,8 +47,10 @@ export const postJoin = async (req, res) => {
   에러 메시지를 만들어 보자
   */
 };
+
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Login" });
+
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = "Login";
@@ -65,6 +67,7 @@ export const postLogin = async (req, res) => {
       errorMessage: "An account with this username do not exists",
     });
   }
+
   //비밀번호가 저장된 것과 같은지 비교
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
@@ -73,7 +76,8 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong Password",
     });
   }
-  req.session.loggedIn = true; //모든 브라우저마다 다른 세션을 가지고 있다
+
+  req.session.loggedIn = true; //모든 브라우저마다 다른 세션 값을 가지고 있다
   req.session.user = user;
   return res.redirect("/");
 };

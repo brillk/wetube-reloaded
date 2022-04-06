@@ -1,6 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
 import rootRouter from "./routers/rootRouter";
 import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
@@ -14,11 +16,17 @@ app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 
+//세션은 서버에 들어갈 쿠키를 만들어 준다
+//쿠키안에는 여러가지가 들어 갈수 있지만,session Id라는 걸 생성한다
 app.use(
   session({
     secret: "Hello",
-    resave: true,
+    resave: true, //방문하는 모든 사용자에게 쿠키를 주는게 아닌 로그인한 한정된 사람한테만 주자, 만약 만명이 한꺼번에 오는데 만개의 쿠키를 주면 서버터진다
     saveUninitialized: true,
+    store: MongoStore.create({ client: mongoose.connection.getClient() }), //db.js에 있는 저장된 url연결
+    //원래 session은 memoryStore에 있어서 새로고침하면 사라지는데,
+    //현재 session은 mongodb daabase에 저장되어 있다
+    //세션은 backend에 호출할떄만 만들어진다
   })
 );
 /*
@@ -45,6 +53,9 @@ res.locals.sexy = "Me";
 title = #{sexy}
 */
 
+/*세션은 디폴트로 RAM메모리에 저장되는데 
+렘메모리는 껐다 켜면 사라지니까 mongoStore로 지정해주면 몽고db 
+즉, 보조기억장치에 저장시켜서 껏다켜도 사라지지 않게 할 수 있다 */
 app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/users", usersRouter);
