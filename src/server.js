@@ -2,7 +2,6 @@ import express from "express";
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import mongoose from "mongoose";
 import rootRouter from "./routers/rootRouter";
 import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
@@ -20,14 +19,16 @@ app.use(express.urlencoded({ extended: true }));
 //쿠키안에는 여러가지가 들어 갈수 있지만,session Id라는 걸 생성한다
 app.use(
   session({
-    secret: "Hello",
+    secret: process.env.COOKIE_SECRET,
     resave: false, //방문하는 모든 사용자에게 쿠키를 주는게 아닌 로그인한 한정된 사람한테만 주자, 만약 만명이 한꺼번에 오는데 만개의 쿠키를 주면 서버터진다
     saveUninitialized: false,
-    store: MongoStore.create({ client: mongoose.connection.getClient() }), //db.js에 있는 저장된 url연결
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }), //db.js에 있는 저장된 url연결
     //원래 session은 memoryStore에 있어서 새로고침하면 사라지는데,
     //현재 session은 mongodb daabase에 저장되어 있다
     //세션은 backend에 호출할떄만 만들어진다
   })
+  //Domain은 쿠키를 만드는 백엔드를 알려준다, 현재는 localhost
+  //쿠키는 만료날짜가 명시되지 않으면, 창을 닫을 시 기본적으로 14일후 쿠키가 사라진다
 );
 /*
 1. 브라우져에서 서버에 로그인 요청, 로그인이 되면 서버는 세션id를 response해주고
@@ -52,10 +53,6 @@ res.locals.sexy = "Me";
 
 title = #{sexy}
 */
-
-/*세션은 디폴트로 RAM메모리에 저장되는데 
-렘메모리는 껐다 켜면 사라지니까 mongoStore로 지정해주면 몽고db 
-즉, 보조기억장치에 저장시켜서 껏다켜도 사라지지 않게 할 수 있다 */
 app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/users", usersRouter);
