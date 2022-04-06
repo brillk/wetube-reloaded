@@ -14,3 +14,5 @@ rootRouter.route("/join").get(getJoin).post(postJoin);
 rootRouter.route("/login").get(getLogin).post(postLogin);
 rootRouter.get("/search", search);
 export default rootRouter;
+
+//express-session을 써서 유저의 정보가 db에 저장되도록 해보자 
