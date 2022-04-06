@@ -5,7 +5,7 @@ export const postJoin = async (req, res) => {
   const { name, username, email, password, location, password2 } = req.body;
   const pageTitle = "Join";
   if (password !== password2) {
-    return res.render("join", {
+    return res.status(400).render("join", {
       //비밀번호를 두번 확인하는데 서로 다른 비밀번호를 적으면 메시지를 반환
       pageTitle,
       errorMessage: "Password confirmation does not match",
@@ -14,7 +14,7 @@ export const postJoin = async (req, res) => {
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
     //유저가 이미 있다면 메시지를 반환
-    return res.render("join", {
+    return res.status(400).render("join", {
       pageTitle,
       errorMessage: "This username/email is already taken",
     }); //join.pug에 표시해야 한다

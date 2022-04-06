@@ -42,11 +42,12 @@ export const watch = async (req, res) => {
   }
   return res.render("watch", { pageTitle: video.title, video });
 };
+
 export const getEdit = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
   if (!video) {
-    return res.render("404", { pageTitle: "Video not found." });
+    return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
 };
@@ -57,7 +58,7 @@ export const postEdit = async (req, res) => {
   const video = await Video.exists({ _id: id });
   //exists 는 필터를 필요로 하고, 어떤것이든 들어갈 수 있다.
   if (!video) {
-    return res.render("404", { pageTitle: "Video not found." });
+    return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   //mongoose가 제공하는 function을 써서 간단하게 줄였다..사실 간단하진 않다..
   //Video는 model 즉 데이터베이스의 이름이므로 다른 옵션들을 쓸 수 있다
@@ -85,7 +86,7 @@ export const postUpload = async (req, res) => {
     });
     return res.redirect("/");
   } catch (error) {
-    return res.render("upload", {
+    return res.status(400).render("upload", {
       pageTitle: "Upload Video",
       errorMessage: error._message,
     });
