@@ -1,4 +1,4 @@
-//import를 한곳에 모아 그걸 문서화
+import "dotenv/config"; //서버가 시작되는 곳에 env파일을 읽을 수 있게 설정
 import "./db";
 import "./models/Video.js";
 import "./models/User.js";

@@ -9,3 +9,5 @@ const handleError = error => console.log("❌ DB Error", error);
 
 db.on("error", handleError); //계속 발생
 db.once("open", handleOpen); //한번만 빌생
+
+//dotenv는 .env 파일에 있는 변수를 읽고 쓸수 있게 해준다

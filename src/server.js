@@ -22,7 +22,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: false, //방문하는 모든 사용자에게 쿠키를 주는게 아닌 로그인한 한정된 사람한테만 주자, 만약 만명이 한꺼번에 오는데 만개의 쿠키를 주면 서버터진다
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.DB_URL }), //db.js에 있는 저장된 url연결
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }), 
     //원래 session은 memoryStore에 있어서 새로고침하면 사라지는데,
     //현재 session은 mongodb daabase에 저장되어 있다
     //세션은 backend에 호출할떄만 만들어진다
