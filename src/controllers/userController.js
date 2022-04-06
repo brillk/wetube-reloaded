@@ -52,9 +52,10 @@ export const getLogin = (req, res) =>
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = "Login";
-  /*check if account exists
-  //check if password correct
-  //using bcrypt.compare
+  /*
+  check if account exists
+  check if password correct
+  using bcrypt.compare
   어떤 유저가 로그인하는지 DB에서 가져온다
   */
   const user = await User.findOne({ username });
@@ -72,7 +73,8 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong Password",
     });
   }
-  console.log("Log User In! Coming Soon");
+  req.session.loggedIn = true; //모든 브라우저마다 다른 세션을 가지고 있다
+  req.session.user = user;
   return res.redirect("/");
 };
 
