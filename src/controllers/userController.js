@@ -82,6 +82,23 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
+export const startGithubLogin = (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: "507df3cf84207958649a",
+    allow_signup: false,
+    scope: "read:user user:email", //보고자 하는 정보의 옵션들은 공백으로 띄워준다
+    //scope = 유저에게서 얼마나 많이 정보를 읽어내고 
+    //어떤 정보를 가져올 것에 대한것
+    //여러 정보들은 우리가 선택해서 볼 수 있게 할 수 있다.
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+export const finishGithubLogin = (req,res) => {
+  //-이제 Authorize하면 전송되는 callback URL에 대해서 작성할 예정-
+}
 export const edit = (req, res) => res.send("Edit User");
 export const removeUser = (req, res) => res.send("Remove User");
 export const logout = (req, res) => res.send("Log out User");
