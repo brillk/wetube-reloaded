@@ -112,7 +112,7 @@ export const finishGithubLogin = async (req, res) => {
 
   const tokenRequest = await (
     await fetch(finalUrl, {
-      //fetch는 서버에는 없고 브라우저에만 존재한다 -> node-fetch 설치
+      //fetch는 서버에는 없고 브라우저에만 존재한다 -> cross-fetch 설치
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -122,20 +122,32 @@ export const finishGithubLogin = async (req, res) => {
 
   if ("access_token" in tokenRequest) {
     const { access_token } = tokenRequest;
-    const userRequest = await (
-      await fetch("https://api.github.com/user", {
+    const apiUrl = "https://api.github.com";
+    const userData = await (
+      await fetch(`${apiUrl}/user`, {
+        headers: {
+          Authorization: `token ${access_token}`, //access_token에서 적었기 때문에 이메일 사용이 가능
+        },
+      })
+    ).json();
+    console.log(userData);
+
+    const emailData = await (
+      await fetch(`${apiUrl}/user/emails`, {
         headers: {
           Authorization: `token ${access_token}`,
         },
       })
     ).json();
-    console.log(userRequest);
-    //유저의 토큰을 이미 사용했다면 /로 보낸다
-    //access api
+    const email = emailData.find(
+      (email) => email.primary ===true && email.verified === true
+    );
+    if(!email) {
+      return res.redirect("/login");
+    }
   } else {
     return res.redirect("/login");
   }
-  
 };
 export const edit = (req, res) => res.send("Edit User");
 export const removeUser = (req, res) => res.send("Remove User");
