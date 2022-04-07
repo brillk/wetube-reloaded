@@ -85,10 +85,10 @@ export const postLogin = async (req, res) => {
 export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
-    client_id: "507df3cf84207958649a",
+    client_id: process.env.GH_CLIENT,
     allow_signup: false,
     scope: "read:user user:email", //보고자 하는 정보의 옵션들은 공백으로 띄워준다
-    //scope = 유저에게서 얼마나 많이 정보를 읽어내고 
+    //scope = 유저에게서 얼마나 많이 정보를 읽어내고
     //어떤 정보를 가져올 것에 대한것
     //여러 정보들은 우리가 선택해서 볼 수 있게 할 수 있다.
   };
@@ -96,9 +96,34 @@ export const startGithubLogin = (req, res) => {
   const finalUrl = `${baseUrl}?${params}`;
   return res.redirect(finalUrl);
 };
-export const finishGithubLogin = (req,res) => {
+
+export const finishGithubLogin = async (req, res) => {
   //-이제 Authorize하면 전송되는 callback URL에 대해서 작성할 예정-
-}
+  const baseUrl = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.GH_CLIENT,
+    client_secret: process.env.GH_SECRET,
+    code: req.query.code,
+    //이걸 url에 넣어야 한다
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const data = await fetch(finalUrl, {
+    method: "POST",
+    headers: "application/json",
+    /*
+    1. fetch('url')로 다른 서버를 통해 데이터를 가져올 수있다.
+    하지만, res.body 에 담겨있는 날것의 url로는 
+    제대로 된 객체를 받아올 수 없다.
+    2.때문에 중간에 .json 함수가 response의 스트림을 가져와 끝까지 읽고,
+    res.body의 텍스트를 promise의 형태로 반환한다.
+    3. 다른 서버에서 데이터를 object 형식으로 받아온다
+    "lon":139.01,"lat":35.02
+    */
+  });
+  const json = await data.json();
+  console.log(json);
+};
 export const edit = (req, res) => res.send("Edit User");
 export const removeUser = (req, res) => res.send("Remove User");
 export const logout = (req, res) => res.send("Log out User");
