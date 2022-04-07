@@ -126,11 +126,10 @@ export const finishGithubLogin = async (req, res) => {
     const userData = await (
       await fetch(`${apiUrl}/user`, {
         headers: {
-          Authorization: `token ${access_token}`, //access_token에서 적었기 때문에 이메일 사용이 가능
+          Authorization: `token ${access_token}`, //scope에서 적었기 때문에 이메일 사용이 가능
         },
       })
     ).json();
-    console.log(userData);
 
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
@@ -139,11 +138,30 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    const email = emailData.find(
-      (email) => email.primary ===true && email.verified === true
+    const emailObj = emailData.find(
+      email => email.primary === true && email.verified === true
     );
-    if(!email) {
+    if (!emailObj) {
       return res.redirect("/login");
+    } //이미 로그인 한 유저인지 검사한다
+    const existingUser = await User.findOne({ email: emailObj.email });
+    if (existingUser) {
+      req.session.loggedIn = true;
+      req.session.user = existingUser;
+      return res.redirect("/");
+    } else {
+      //create an account -> 깃헙으로 로그인 했으면 비밀번호는 없을테니 id로 검사
+      const user = await User.create({
+        name: userData.name,
+        username: userData.login ? userData.login : "Unknown",
+        email: emailObj.email,
+        password: "",
+        socialOnly: true,
+        location: userData.location,
+      });
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect("/");
     }
   } else {
     return res.redirect("/login");
