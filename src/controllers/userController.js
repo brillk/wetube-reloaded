@@ -61,7 +61,7 @@ export const postLogin = async (req, res) => {
   using bcrypt.compare
   어떤 유저가 로그인하는지 DB에서 가져온다
   */
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username, socialOnly: false });
   if (!user) {
     return res.status(400).render("login", {
       pageTitle,
@@ -144,14 +144,11 @@ export const finishGithubLogin = async (req, res) => {
     if (!emailObj) {
       return res.redirect("/login");
     } //이미 로그인 한 유저인지 검사한다
-    const existingUser = await User.findOne({ email: emailObj.email });
-    if (existingUser) {
-      req.session.loggedIn = true;
-      req.session.user = existingUser;
-      return res.redirect("/");
-    } else {
+    let user = await User.findOne({ email: emailObj.email });
+    if (!user) {
       //create an account -> 깃헙으로 로그인 했으면 비밀번호는 없을테니 id로 검사
-      const user = await User.create({
+      user = await User.create({
+        avatarUrl: userData.avatarUrl_url,
         name: userData.name,
         username: userData.login ? userData.login : "Unknown",
         email: emailObj.email,
@@ -159,15 +156,17 @@ export const finishGithubLogin = async (req, res) => {
         socialOnly: true,
         location: userData.location,
       });
-      req.session.loggedIn = true;
-      req.session.user = user;
-      return res.redirect("/");
     }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return res.redirect("/login");
   }
 };
 export const edit = (req, res) => res.send("Edit User");
-export const removeUser = (req, res) => res.send("Remove User");
-export const logout = (req, res) => res.send("Log out User");
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
 export const see = (req, res) => res.send("See User");
