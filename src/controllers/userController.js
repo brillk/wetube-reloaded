@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import fetch from "cross-fetch";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -108,21 +109,33 @@ export const finishGithubLogin = async (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
-  const data = await fetch(finalUrl, {
-    method: "POST",
-    headers: "application/json",
-    /*
-    1. fetch('url')로 다른 서버를 통해 데이터를 가져올 수있다.
-    하지만, res.body 에 담겨있는 날것의 url로는 
-    제대로 된 객체를 받아올 수 없다.
-    2.때문에 중간에 .json 함수가 response의 스트림을 가져와 끝까지 읽고,
-    res.body의 텍스트를 promise의 형태로 반환한다.
-    3. 다른 서버에서 데이터를 object 형식으로 받아온다
-    "lon":139.01,"lat":35.02
-    */
-  });
-  const json = await data.json();
-  console.log(json);
+
+  const tokenRequest = await (
+    await fetch(finalUrl, {
+      //fetch는 서버에는 없고 브라우저에만 존재한다 -> node-fetch 설치
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+  ).json();
+
+  if ("access_token" in tokenRequest) {
+    const { access_token } = tokenRequest;
+    const userRequest = await (
+      await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    console.log(userRequest);
+    //유저의 토큰을 이미 사용했다면 /로 보낸다
+    //access api
+  } else {
+    return res.redirect("/login");
+  }
+  
 };
 export const edit = (req, res) => res.send("Edit User");
 export const removeUser = (req, res) => res.send("Remove User");
