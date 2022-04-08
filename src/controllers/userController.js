@@ -90,7 +90,7 @@ export const startGithubLogin = (req, res) => {
     allow_signup: false,
     scope: "read:user user:email", //보고자 하는 정보의 옵션들은 공백으로 띄워준다
     //scope = 유저에게서 얼마나 많이 정보를 읽어내고
-    //어떤 정보를 가져올 것에 대한것
+    //어떤 정보를 가져올 것에 대한 것
     //여러 정보들은 우리가 선택해서 볼 수 있게 할 수 있다.
   };
   const params = new URLSearchParams(config).toString();
@@ -148,7 +148,7 @@ export const finishGithubLogin = async (req, res) => {
     if (!user) {
       //create an account -> 깃헙으로 로그인 했으면 비밀번호는 없을테니 id로 검사
       user = await User.create({
-        avatarUrl: userData.avatarUrl_url,
+        avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login ? userData.login : "Unknown",
         email: emailObj.email,
@@ -164,9 +164,16 @@ export const finishGithubLogin = async (req, res) => {
     return res.redirect("/login");
   }
 };
-export const edit = (req, res) => res.send("Edit User");
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+export const postEdit = (req, res) => {
+  return res.render("edit-profile");
+};
+
 export const see = (req, res) => res.send("See User");

@@ -1,6 +1,7 @@
 import express from "express";
 import {
-  edit,
+  getEdit,
+  postEdit,
   logout,
   see,
   startGithubLogin,
@@ -10,7 +11,7 @@ import {
 const usersRouter = express.Router(); //라우터 만들기
 
 usersRouter.get("/logout", logout);
-usersRouter.get("/edit", edit); //링크를 GET하기
+usersRouter.route("/edit").get(getEdit).post(postEdit);
 usersRouter.get("/github/start", startGithubLogin);
 usersRouter.get("/github/finish", finishGithubLogin);
 usersRouter.get("/:id(\\d+)", see);
