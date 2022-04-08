@@ -164,6 +164,7 @@ export const finishGithubLogin = async (req, res) => {
     return res.redirect("/login");
   }
 };
+
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
@@ -172,7 +173,16 @@ export const logout = (req, res) => {
 export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
-export const postEdit = (req, res) => {
+//지금 유저의 정보(user object)를 가져올떄 session에 저장했기 때문에
+//req.session.~ 이 형태로 가져와야한다
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { email, username, name, location },
+  } = req;
+  await User.findByIdAndUpdate(_id, { email, username, name, location });
   return res.render("edit-profile");
 };
 

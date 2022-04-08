@@ -8,12 +8,25 @@ import {
   deleteVideo,
 } from "../controllers/videoController.js";
 
+import { protectorMiddleware } from "../middlewares.js";
+
 const videosRouter = express.Router(); //라우터 만들기
 
-videosRouter.route("/upload").get(getUpload).post(postUpload);
-videosRouter.get("/:id([0-9a-f]{24})", watch); //링크를 GET하기
-videosRouter.route("/:id([0-9a-f]{24})/edit").get(getEdit).post(postEdit);
-videosRouter.route("/:id([0-9a-f]{24})/delete").get(deleteVideo);
+videosRouter.get("/:id([0-9a-f]{24})", watch);
+videosRouter
+  .route("/:id([0-9a-f]{24})/edit")
+  .all(protectorMiddleware)
+  .get(getEdit)
+  .post(postEdit);
+videosRouter
+  .route("/:id([0-9a-f]{24})/delete")
+  .all(protectorMiddleware)
+  .get(deleteVideo);
+videosRouter
+  .route("/upload")
+  .all(protectorMiddleware)
+  .get(getUpload)
+  .post(postUpload);
 
 export default videosRouter;
 
