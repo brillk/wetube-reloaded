@@ -6,13 +6,20 @@ import {
   getLogin,
   postLogin,
 } from "../controllers/userController";
+import { publicOnlyMiddleware } from "../middlewares.js";
 
-const rootRouter = express.Router(); //라우터 만들기
+const rootRouter = express.Router(); 
 
-rootRouter.get("/", home); //링크를 GET하기
-rootRouter.route("/join").get(getJoin).post(postJoin);
-rootRouter.route("/login").get(getLogin).post(postLogin);
+rootRouter.get("/", home); 
+rootRouter.route("/join").all(publicOnlyMiddleware).get(getJoin).post(postJoin);
+rootRouter
+  .route("/login")
+  .all(publicOnlyMiddleware)
+  .get(getLogin)
+  .post(postLogin);
 rootRouter.get("/search", search);
 export default rootRouter;
+//publicOnlyMiddleware를 사용해 로그인이 되어 있으면 login, join할수 없게 설정
 
-//express-session을 써서 유저의 정보가 db에 저장되도록 해보자 
+
+//express-session을 써서 유저의 정보가 db에 저장되도록 해보자
