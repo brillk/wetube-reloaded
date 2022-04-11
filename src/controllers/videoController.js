@@ -35,14 +35,20 @@ export const watch = async (req, res) => {
   //upload를 하면 watch 를 부르기 때문에 오류가 난다
   //watch.pug를 수정
   const { id } = req.params;
-  const video = await Video.findById(id);
-  const owner = await User.findById(video.owner);
-  //video에 유저 아이디를 저장시키면 다양한 구현이 가능하다
+  const video = await Video.findById(id).populate("owner"); 
+  /*
+  Population은 문서의 지정된 경로를 다른 컬렉션의 문서로 
+  자동 교체하는 프로세스입니다. 
+  단일 문서, 여러 문서, 일반 개체, 여러 일반 개체 또는 
+  쿼리에서 반환된 모든 개체를 채울 수 있습니다.
+  
+  video에 유저 아이디를 저장시키면 다양한 구현이 가능하다
+  */
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
 
   }
-  return res.render("watch", { pageTitle: video.title, video, owner });
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = async (req, res) => {

@@ -6,11 +6,13 @@ block content
         p=video.description
         small=video.createdAt
     div     
-        small Uploaded by #{owner.name}
-    if String(video.owner) === String(loggedInUser._id) 
+        small Uploaded by 
+        a(href=`/users/${video.owner._id}`)=video.owner.name
+    if String(video.owner._id) === String(loggedInUser._id) 
         a(href=`${video.id}/edit`) Edit Video &rarr;
         br
         a(href=`${video.id}/delete`) Delete Video &rarr;
 
 
 //- 영상을 올린 사람과 로그인한 사람의 아이디가 같다면 Edit, Delete를 보여준다
+//- 작성자 이름을 누르면 프로필로 이동 및 비디오를 보여준다

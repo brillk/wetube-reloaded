@@ -1,5 +1,7 @@
 extends ../base
+include ../mixins/video
 
 
 block content   
-    p Hello
+    each video in videos 
+        +video(video)
