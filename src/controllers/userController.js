@@ -179,12 +179,12 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { email, username, name, location },
     file,
   } = req;
-  console.log(file);
+
   const findUsername = await User.findOne({ username });
   const findEmail = await User.findOne({ email });
 
@@ -196,11 +196,14 @@ export const postEdit = async (req, res) => {
       pageTitle: "Edit Profile",
       errorMessage: "User Exist",
     });
-  }
+  } 
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl, 
+      //업로드한 파일이 없거나  undefined일때 원래 쓰던 avatar를 리턴 
+      //절대 파일을 DB에 넣지 않는다 파일의 위치를 저장한다
       email,
       username,
       name,

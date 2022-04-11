@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: String,
 });
+
 /*
 hashing password
 비밀번호를 해싱하면 정해진 랜덤 번호로 바뀐다 
