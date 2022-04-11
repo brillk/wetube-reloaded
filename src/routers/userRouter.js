@@ -10,11 +10,19 @@ import {
   postChangePassword,
 } from "../controllers/userController.js";
 
-import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares.js";
+import {
+  protectorMiddleware,
+  publicOnlyMiddleware,
+  uploadFile,
+} from "../middlewares.js";
 const usersRouter = express.Router(); //라우터 만들기
 
 usersRouter.get("/logout", protectorMiddleware, logout);
-usersRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
+usersRouter
+  .route("/edit")
+  .all(protectorMiddleware)
+  .get(getEdit)
+  .post(uploadFile.single("avatar"), postEdit); //avatar이름을 가진 input의 파일을 가지고 와서 uploads로 저장 한다
 usersRouter
   .route("/change-password")
   .all(protectorMiddleware)

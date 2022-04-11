@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddleware = (req, res, next) => {
   //loggedIn이 true, false인지 확인
   res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -20,8 +22,10 @@ export const protectorMiddleware = (req, res, next) => {
 //로그인을 했는데, 다시 로그인 페이지로 가지 않게 설정
 export const publicOnlyMiddleware = (req, res, next) => {
   if (!req.session.loggedIn) {
-    return next(); 
+    return next();
   } else {
     return res.redirect("/");
   }
 };
+
+export const uploadFile = multer({ dest: "uploads/" });

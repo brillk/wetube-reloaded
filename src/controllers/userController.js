@@ -105,7 +105,7 @@ export const finishGithubLogin = async (req, res) => {
     client_id: process.env.GH_CLIENT,
     client_secret: process.env.GH_SECRET,
     code: req.query.code,
-    //이걸 url에 넣어야 한다
+    //이걸 3개를 url에 넣어야 한다
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
@@ -138,6 +138,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
+
     const emailObj = emailData.find(
       email => email.primary === true && email.verified === true
     );
@@ -150,7 +151,7 @@ export const finishGithubLogin = async (req, res) => {
       user = await User.create({
         avatarUrl: userData.avatar_url,
         name: userData.name,
-        username: userData.login ? userData.login : "Unknown",
+        username: userData.login,
         email: emailObj.email,
         password: "",
         socialOnly: true,
@@ -181,8 +182,9 @@ export const postEdit = async (req, res) => {
       user: { _id },
     },
     body: { email, username, name, location },
+    file,
   } = req;
-
+  console.log(file);
   const findUsername = await User.findOne({ username });
   const findEmail = await User.findOne({ email });
 
@@ -228,7 +230,7 @@ export const postChangePassword = async (req, res) => {
     body: { oldPassword, newPassword, newPasswordConfirm },
   } = req;
 
-  const user = await User.findById(_id); 
+  const user = await User.findById(_id);
   //지금 session에 있는 값을 변경했기 때문에 session도 업뎃을 해야한다
   //변수로 지정해 비밀번호를 바꿀때마다 새로운 값을 넣는다
   const ok = await bcrypt.compare(oldPassword, user.password);
