@@ -212,6 +212,18 @@ export const postEdit = async (req, res) => {
   return res.redirect("/users/edit");
 };
 
+export const getChangePassword = (req, res) => {
+  //login한 사람이라면 비밀번호를 보여주고 고치게 한다
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = (req, res) => {
+  //send notification to change password
+  return res.redirect("/");
+};
+
 export const see = (req, res) => res.send("See User");
 
 //현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
