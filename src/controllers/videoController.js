@@ -77,11 +77,15 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  //파일 저장?
+  //multer를 사용하면 form에 enctype을 꼭 적자
+  const file = req.file;
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title,
       description,
+      fileUrl: file.path,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");

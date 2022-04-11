@@ -211,6 +211,7 @@ export const postEdit = async (req, res) => {
     },
     { new: true }
   );
+   
 
   req.session.user = updatedUser;
 
