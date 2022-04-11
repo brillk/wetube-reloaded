@@ -1,4 +1,5 @@
 import Video from "../models/Video";
+import User from "../models/User";
 
 /* 
 callback / Video.find({}, (error, videos) => {});
@@ -35,12 +36,13 @@ export const watch = async (req, res) => {
   //watch.pug를 수정
   const { id } = req.params;
   const video = await Video.findById(id);
-  //이제 아이디를 읽을 수 있으니 출력해보자
+  const owner = await User.findById(video.owner);
+  //video에 유저 아이디를 저장시키면 다양한 구현이 가능하다
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
-    //만약 동영상이 없고 null상태라면 404.pug를 보낸다
+
   }
-  return res.render("watch", { pageTitle: video.title, video });
+  return res.render("watch", { pageTitle: video.title, video, owner });
 };
 
 export const getEdit = async (req, res) => {
@@ -77,15 +79,17 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  //파일 저장?
-  //multer를 사용하면 form에 enctype을 꼭 적자
-  const file = req.file;
+  const {
+    user: { _id },
+  } = req.session;
+  const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title,
       description,
-      fileUrl: file.path,
+      fileUrl,
+      owner: _id, //현재 로그인된 유저만 쓸수 있다
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");

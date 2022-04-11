@@ -12,7 +12,15 @@ const videoSchema = new mongoose.Schema({
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
   },
+  owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
+/*
+  지금 유저와 비디오가 접점이 없다 따라서 id를 이용해 둘을 엮어보자
+  user에는 업로드한 모든 영상과 id를 저장
+  video는 해당 영상을 올린 user의 id 를 저장
+
+  ref: mongoose에게 owner에게 id를 저장하겠다고 알려준다
+ */
 
 /*
   1. findByIdAndUpdate()에서는 save 훅업, 즉 저장이되지 않는다
