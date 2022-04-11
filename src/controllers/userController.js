@@ -213,15 +213,49 @@ export const postEdit = async (req, res) => {
 };
 
 export const getChangePassword = (req, res) => {
-  //login한 사람이라면 비밀번호를 보여주고 고치게 한다
+  // 1. login한 사람이라면 비밀번호를 보여주고 고치게 한다
   if (req.session.user.socialOnly === true) {
     return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
 };
-export const postChangePassword = (req, res) => {
+export const postChangePassword = async (req, res) => {
+  // 2. 누가 로그인 했는지 알아야한다
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirm },
+  } = req;
+
+  const user = await User.findById(_id); 
+  //지금 session에 있는 값을 변경했기 때문에 session도 업뎃을 해야한다
+  //변수로 지정해 비밀번호를 바꿀때마다 새로운 값을 넣는다
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    //원래 비밀번호를 틀리면 리턴
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "Current password is incorrect",
+    });
+  }
+
+  if (newPassword !== newPasswordConfirm) {
+    //비밀번호 비교
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "New password does not match",
+    });
+  }
+
+  // 3. 바꾼 비밀번호를 업데이트 하자 / promise는 await
+  //save 함수를 써야하니까 session에서 로그인된 user를 찾아야 한다
+
+  user.password = newPassword;
+  await user.save();
+
   //send notification to change password
-  return res.redirect("/");
+  return res.redirect("/users/logout");
 };
 
 export const see = (req, res) => res.send("See User");
