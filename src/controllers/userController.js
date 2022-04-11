@@ -196,13 +196,13 @@ export const postEdit = async (req, res) => {
       pageTitle: "Edit Profile",
       errorMessage: "User Exist",
     });
-  } 
+  }
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl, 
-      //업로드한 파일이 없거나  undefined일때 원래 쓰던 avatar를 리턴 
+      avatarUrl: file ? file.path : avatarUrl,
+      //업로드한 파일이 없거나  undefined일때 원래 쓰던 avatar를 리턴
       //절대 파일을 DB에 넣지 않는다 파일의 위치를 저장한다
       email,
       username,
@@ -211,7 +211,6 @@ export const postEdit = async (req, res) => {
     },
     { new: true }
   );
-   
 
   req.session.user = updatedUser;
 
@@ -264,8 +263,23 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/users/logout");
 };
 
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User Not Found" }); //여기 mongoose연습??
+  }
+  return res.render("users/profile", { pageTitle: user.name, user });
+};
 
-//현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
-//session은 로그인할때 한번만 저장된다. 그러니 값을 바꿔도 초기 값만 나온다
-//session을 업데이트 해보자
+/*
+현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
+session은 로그인할때 한번만 저장된다. 그러니 값을 바꿔도 초기 값만 나온다
+session을 업데이트 해보자
+
+ req.params are the variables in a URL.
+/movies/:id can be found in req.params.id
+
+req.query is the data on the query of the URL
+/movies?filter=views can be found in req.query.filter
+*/
