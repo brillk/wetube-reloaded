@@ -9,7 +9,7 @@ export const localsMiddleware = (req, res, next) => {
 //현재 로그인이 안된 유저가 프로필을 수정할 수 있다
 //url로도 들어가지 못하게 막자
 
-export const pretectorMiddleware = (req, res, next) => {
+export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
     return next();
   } else {

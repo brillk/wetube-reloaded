@@ -182,8 +182,38 @@ export const postEdit = async (req, res) => {
     },
     body: { email, username, name, location },
   } = req;
-  await User.findByIdAndUpdate(_id, { email, username, name, location });
-  return res.render("edit-profile");
+
+  const findUsername = await User.findOne({ username });
+  const findEmail = await User.findOne({ email });
+
+  if (
+    (findUsername != null && findUsername._id != _id) ||
+    (findEmail != null && findEmail._id != _id)
+  ) {
+    return res.render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "User Exist",
+    });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      email,
+      username,
+      name,
+      location,
+    },
+    { new: true }
+  );
+
+  req.session.user = updatedUser;
+
+  return res.redirect("/users/edit");
 };
 
 export const see = (req, res) => res.send("See User");
+
+//현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
+//session은 로그인할때 한번만 저장된다. 그러니 값을 바꿔도 초기 값만 나온다
+//session을 업데이트 해보자

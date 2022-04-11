@@ -1,6 +1,8 @@
 extends base
 //- action을 쓰지 않으면 같은 url에 post request로 자동으로 보내진다
 block content 
+    if errorMessage 
+        span=errorMessage
     form(method="POST")
         input(name="email", type="email", placeholder="Email" required, value=loggedInUser.email )
         input(name="username", type="text", placeholder="Username" required value=loggedInUser.username )
