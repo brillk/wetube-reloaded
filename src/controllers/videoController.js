@@ -52,9 +52,17 @@ export const watch = async (req, res) => {
 
 export const getEdit = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session; //사용자의 id
+
   const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
+  } // 영상 수정을 작성자만 이 url로 들어오게 한다
+  if (String(video.owner) !== String(_id)) {
+    //type이 서로 달라 작동이 되지 않았다
+    return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
 };
@@ -62,10 +70,27 @@ export const getEdit = async (req, res) => {
 export const postEdit = async (req, res) => {
   const { id } = req.params;
   const { title, hashtags, description } = req.body;
-  const video = await Video.exists({ _id: id });
+  const video = await Video.findbyId(id);
+  /* 
+  postEdit에서 video.owner이 undefinded가 나옵니다! 
+  이유는 video를 가져올때 Video.exists로 가져오는데 
+  exists메소드는 boolean을 리턴하기때문에 
+  video.owner이 undefinded으로 나와요
+  video = await Video.exists({ _id: id });
+  밑의 코드로 변환
+  const video = await Video.findbyId(id);
+  
+  */
+  const {
+    user: { _id },
+  } = req.session; //사용자의 id
+
   //exists 는 필터를 필요로 하고, 어떤것이든 들어갈 수 있다.
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
   }
   //mongoose가 제공하는 function을 써서 간단하게 줄였다..사실 간단하진 않다..
   //Video는 model 즉 데이터베이스의 이름이므로 다른 옵션들을 쓸 수 있다
@@ -127,7 +152,23 @@ mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀
 //삭제
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session; //사용자의 id
+  const video = await Video.findById(id);
+  //userdb에 남아있는 videos도 삭제
+  const user = await User.findById(_id);
+
+  if (!video) {
+    return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
+  }
   await Video.findByIdAndDelete(id);
+  user.videos.splice(user.videos.indexOf(id), 1);
+  user.save();
   return res.redirect("/");
 };
 
@@ -156,3 +197,5 @@ export const search = async (req, res) => {
   new는 제목이다 title
   if-else when searching video's value is null or undefined
   */
+
+  //password hasing & type Change

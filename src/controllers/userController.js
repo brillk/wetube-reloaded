@@ -274,6 +274,12 @@ export const see = async (req, res) => {
   return res.render("users/profile", { pageTitle: user.name, user });
 };
 
+/*현재 문제점 로그인을 하면 비밀번호가 hash되는데,
+  영상을 업로드하면 save했기 때문에 또 비밀번호가 hashing 된다
+  그래서 로그아웃하고 다시 로그인 할땐 비밀번호가 똑같지 않음
+
+*/
+
 /*
 현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
 session은 로그인할때 한번만 저장된다. 그러니 값을 바꿔도 초기 값만 나온다

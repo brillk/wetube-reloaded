@@ -24,7 +24,9 @@ saltround라고 있는데, 해싱된 값을 또 해싱해주는 옵션이다 = 5
 유저의 정보를 save하기 전의 비밀번호를 해싱해준다
 */
 userSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 5);
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 5);
+  } //오직 비밀번호가 변경되었을떄만 hassing <- isModified 함수
 });
 
 const User = mongoose.model("User", userSchema);
