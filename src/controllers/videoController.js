@@ -28,7 +28,9 @@ DB를 기다려 준다
 
 export const home = async (req, res) => {
   //sort 어떤 방식으로 정렬할 건지 정할수 있다 asc | desc
-  const videos = await Video.find({}).sort({ createdAt: "desc" });
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner");
   return res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = async (req, res) => {
@@ -188,7 +190,7 @@ export const search = async (req, res) => {
         //정규식을 써서 keyword가 포함된 제목을 찾게 도와준다
         //new 는 새로운 object를 만들어 준다
       },
-    });
+    }).populate("owner");
   }
   return res.render("search", { pageTitle: "Search", videos });
 };
@@ -198,4 +200,4 @@ export const search = async (req, res) => {
   if-else when searching video's value is null or undefined
   */
 
-  //front-end webpack - file converter
+//front-end webpack - file converter

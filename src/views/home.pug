@@ -2,10 +2,9 @@ extends base.pug
 include mixins/video
 
 block content
-    h2 Welcome here for trending videos
-
-    each video in videos 
-        +video(video)
-    else 
-        li Sorry nothing found.
+    div.video-grid
+        each video in videos
+            +video(video)
+        else
+            span.empty__message No videos found 
 //- iteration 배열을 출력한다 each는 출력할 변수명 videos는 값이 들어있는 이름 

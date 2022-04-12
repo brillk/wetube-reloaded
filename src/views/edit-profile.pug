@@ -1,10 +1,7 @@
 extends base
 //- action을 쓰지 않으면 같은 url에 post request로 자동으로 보내진다
 block content 
-    img(src="/" + loggedInUser.avatarUrl, width="100" height="100")
-    if errorMessage 
-        span=errorMessage
-    form(method="POST" enctype="multipart/form-data")
+    form(method="POST", enctype="multipart/form-data").edit-profile__form
         label(for="avatar") Avatar
         input(type="file" id="avatar" name="avatar" accept="image/*")
         input(name="email", type="email", placeholder="Email" required, value=loggedInUser.email )
@@ -13,9 +10,8 @@ block content
         input(name="location", type="text", placeholder="Location" required value=loggedInUser.location )
         input(type="submit", value="Update Profile" )
         if !loggedInUser.socialOnly
-            hr
-            a(href="change-password") Change Password &rarr;
-
+            div.edit-profile__password
+                a(href="change-password") Change Password &rarr; 
             //- 파일을 업로드 하기 위해서 multer 설치, form에 multipart/form-data로 만들어야 함
             //- enctype 지정된 녀석으로 다르게 인코딩될거라는 뜻 -> 백엔드로 보낸다
 
