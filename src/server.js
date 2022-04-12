@@ -55,6 +55,7 @@ title = #{sexy}
 */
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));  //static files serving 활성화 <- 폴더를 브라우저에게 노출시키게 한다
+app.use("/assets", express.static("assets")) // 파일을 공개적으로 돌린다
 app.use("/", rootRouter);
 app.use("/users", usersRouter);
 app.use("/videos", videosRouter);
