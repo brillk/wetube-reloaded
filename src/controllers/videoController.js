@@ -35,7 +35,7 @@ export const watch = async (req, res) => {
   //upload를 하면 watch 를 부르기 때문에 오류가 난다
   //watch.pug를 수정
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner"); 
+  const video = await Video.findById(id).populate("owner");
   /*
   Population은 문서의 지정된 경로를 다른 컬렉션의 문서로 
   자동 교체하는 프로세스입니다. 
@@ -46,7 +46,6 @@ export const watch = async (req, res) => {
   */
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
-
   }
   return res.render("watch", { pageTitle: video.title, video });
 };
@@ -91,13 +90,18 @@ export const postUpload = async (req, res) => {
   const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
       fileUrl,
       owner: _id, //현재 로그인된 유저만 쓸수 있다
+      //newVideo의 id를 User의 videos array에 추가해줄거다
       hashtags: Video.formatHashtags(hashtags),
     });
+    const user = await User.findById(_id);
+    user.videos.push(newVideo._id);
+    user.save();
+    //user, video가 서로 연결되었다
     return res.redirect("/");
   } catch (error) {
     return res.status(400).render("upload", {
@@ -118,17 +122,6 @@ mixins은 데이터를 받을 수 있는 일종의 미리 만들어진 HTML bloc
 
 mongodb가 좋은 이유 document-base라서, 대부분의 db는 sql-base 엑셀시트로 이루어져 있다
 
-  show dbs
- admin   0.000GB
- config  0.000GB
- local   0.000GB
- wetube  0.000GB
-  use wetube
- switched to db wetube
-  show collections
- videos
-
- 여기서 콜렉션은 document들의 묶음이다
 */
 
 //삭제
