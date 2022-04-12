@@ -3,6 +3,7 @@ html(lang="ko")
     head 
         title #{pageTitle} | #{siteName}
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+        link(rel="stylesheet", href="/static/css/style.css")
     body 
         header 
             h1=pageTitle
@@ -38,3 +39,5 @@ html(lang="ko")
 //- 템플릿으로 어떻게 변수를 보낼까? 컨트롤러가 보내니까 거기서 수정  #{pageTitle}  
 //- template - 1. conditionals 
 //- h1=pageTitle 은 오직 하나의 값만 갖는다  #형태는 텍스트를 같이 넣을 수 있다 
+
+//- static 파일을 base.pug에다가 하는걸 잊지마라
