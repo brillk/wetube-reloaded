@@ -2,12 +2,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/front-end/js/main.js", //내가 변경하고자 하는 파일
+  entry: {
+    main: "./src/front-end/js/main.js",
+    videoPlayer: "./src/front-end/js/videoPlayer.js"}, //내가 변경하고자 하는 파일
   mode: "development",
   watch: true,
   plugins: [new MiniCssExtractPlugin({ filename: "css/style.css" })],
   output: {
-    filename: "js/main.js",
+    filename: "js/[name].js", //여러 파일을 webpack에 넣을수 있다 [name] 
     path: path.resolve(__dirname, "assets"),
   },
   module: {
