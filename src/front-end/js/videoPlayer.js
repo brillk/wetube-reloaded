@@ -45,12 +45,19 @@ const handleVolumeChange = event => {
   }
 };
 
+const formatTime = seconds => {
+  const startIdx = seconds >= 3600 ? 11 : 14;
+  return new Date(seconds * 1000).toISOString().substring(startIdx, 19);
+};
+
+//substring (시작 인덱스, 종료 인덱스)
+
 const handleLoadedMetadata = () => {
-  totalTime.innerText = Math.floor(video.duration); //비디오의 총 시간을 알아야 한다
+  totalTime.innerText = formatTime(Math.floor(video.duration)); //비디오의 총 시간을 알아야 한다
 };
 const handleTimeUpdate = () => {
   //current Time
-  currentTime.innerText = Math.floor(video.currentTime);
+  currentTime.innerText = formatTime(Math.floor(video.currentTime));
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -59,3 +66,4 @@ volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 //loaded meta data
+//date constructor?
