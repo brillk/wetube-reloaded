@@ -4,6 +4,7 @@ const muteBtn = document.getElementById("mute");
 const volumeRange = document.getElementById("volume");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
+const timeline = document.getElementById("timeline");
 
 let volumeValue = 0.5;
 video.volume = volumeValue;
@@ -54,16 +55,27 @@ const formatTime = seconds => {
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration)); //비디오의 총 시간을 알아야 한다
+  timeline.max = Math.floor(video.duration);
 };
 const handleTimeUpdate = () => {
   //current Time
   currentTime.innerText = formatTime(Math.floor(video.currentTime));
+  timeline.value = Math.floor(video.currentTime); //input range에 비디오길이를 추가한다
 };
+
+const handleTimelineChange = event => {
+  const {
+    target: { value },
+  } = event;
+  video.currentTime = value;
+};
+
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+timeline.addEventListener("change", handleTimelineChange);
 //loaded meta data
 //date constructor?
