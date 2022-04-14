@@ -127,6 +127,22 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 2000);
 };
 
+const keyboardControl = event => {
+  switch (event.keyCode) {
+    case 32:
+      handlePlayClick();
+      break;
+    case 77:
+      handleMuteClick();
+      break;
+    case 70:
+      handleFullScreen();
+  }
+};
+const clickToStop = () => {
+  handlePlayClick();
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -137,5 +153,7 @@ videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
 
+window.addEventListener("keydown", keyboardControl);
+video.addEventListener("click", clickToStop);
 //loaded meta data
 //date constructor?
