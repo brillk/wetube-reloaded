@@ -6,7 +6,7 @@ import rootRouter from "./routers/rootRouter";
 import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares.js";
-
+import apiRouter from "./routers/apiRouter.js";
 const app = express();
 const logger = morgan("dev");
 
@@ -59,6 +59,7 @@ app.use("/static", express.static("assets")); // 파일을 공개적으로 돌�
 app.use("/", rootRouter);
 app.use("/users", usersRouter);
 app.use("/videos", videosRouter);
+app.use("/api", apiRouter);
 
 export default app;
 
