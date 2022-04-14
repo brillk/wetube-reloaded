@@ -204,13 +204,13 @@ export const registerView = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
   if (!video) {
-    return res.status(404);
+    return res.sendStatus(404);
   }
   video.meta.views = video.meta.views + 1;
   video.save();
   //백엔드 처리 탬플릿을 처리하지 않고,
   //url도 바꾸지 않는 백엔드 처리
-  return res.status(200); //front-end 호출
+  return res.sendStatus(200); //front-end 호출
 };
 
 //front-end webpack - file converter

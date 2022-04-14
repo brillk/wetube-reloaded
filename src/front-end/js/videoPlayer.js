@@ -153,7 +153,7 @@ const handleEnded = () => {
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadeddata", handleLoadedMetadata);
+video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
@@ -166,3 +166,10 @@ video.addEventListener("ended", handleEnded); //비디오가 끝난 걸 감지�
 video.addEventListener("click", clickToStop);
 //loaded meta data
 //date constructor?
+
+/* 
+Data Attributes
+ data-* 속성은 표준이 아닌 속성이나 추가적인 DOM 속성, 
+ Node.setUserData()과 같은 다른 조작을 하지 않고도, 
+ 의미론적 표준 HTML 요소에 추가 정보를 저장할 수 있도록 해줍니다.
+*/
