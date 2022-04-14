@@ -1,15 +1,24 @@
 const video = document.querySelector("video");
+
 const playBtn = document.getElementById("play");
+const playBtnIcon = playBtn.querySelector("i");
+
 const muteBtn = document.getElementById("mute");
+const muteBtnIcon = muteBtn.querySelector("i");
+
 const volumeRange = document.getElementById("volume");
-const currentTime = document.getElementById("currentTime");
+const currentTime = document.getElementById("currenTime");
 const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
+
 const fullScreenBtn = document.getElementById("fullScreen");
+const fullScreenIcon = fullScreenBtn.querySelector("i");
+
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 
 let controlsTimeout = null;
+let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
@@ -20,7 +29,7 @@ const handlePlayClick = e => {
   } else {
     video.pause();
   }
-  playBtn.innerText = video.paused ? "Play" : "Pause";
+  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
 const handleMuteClick = e => {
@@ -29,7 +38,9 @@ const handleMuteClick = e => {
   } else {
     video.muted = true;
   }
-  muteBtn.innerText = video.muted ? "Unmute" : "Mute";
+  muteBtnIcon.classList = video.muted
+    ? "fas fa-volume-mute"
+    : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -39,15 +50,10 @@ const handleVolumeChange = event => {
   } = event;
   if (video.muted) {
     video.muted = false;
-    muteBtn.innerText = "Mute";
+    muteBtnIcon.classList = "fas fa-volume-mute";
   }
-  volumeValue = Number(value); //볼륨을 음소거전으로 바꿔준다
+  volumeValue = value;
   video.volume = value;
-
-  if (volumeValue === 0) {
-    video.muted = true;
-    muteBtn.innerText = "Unmute";
-  }
 };
 
 const formatTime = seconds => {
@@ -74,43 +80,62 @@ const handleTimelineChange = event => {
   video.currentTime = value;
 };
 
-const handleFullScreen = () => {
+const handleFullScreen = e => {
   //풀스크린 조절
   const fullscreen = document.fullscreenElement;
 
   if (fullscreen) {
     document.exitFullscreen();
-    fullScreenBtn.innerText = "Enter Full Screen";
+    fullScreenIcon.classList = "fas fa-expand";
   } else {
     videoContainer.requestFullscreen();
-    fullScreenBtn.innerText = "Exit Full Screen";
+    fullScreenIcon.classList = "fas fa-compress";
   }
 };
+
+const hideControls = () => videoControls.classList.remove("showing");
 
 const handleMouseMove = () => {
   if (controlsTimeout) {
     clearTimeout(controlsTimeout);
     controlsTimeout = null;
   }
+
+  if (controlsMovementTimeout) {
+    clearTimeout(controlsMovementTimeout);
+    controlsMovementTimeout = null;
+  } // 오래된 Timeout을 취소하고 새로운 timeout을 만들고 있다.
+
   //마우스가 비디오안에 나갔다가 다시 들어오면 UI가 사라지는 시간을 초기화한다
-  videoControls.classList.add("show");
+  videoControls.classList.add("showing");
+  //마우스가 화면안에 가만히 있다면 UI를 사라지게
+  controlsMovementTimeout = setTimeout(hideControls, 3000);
 };
+/*
+  handleMousemove 요약
+  1. 아무것도 없는 상태에서 비디오 위로 마우스 움직임.
+  2. 즉시 showing이라는 클래스가 추가되고 3초짜리 showing을 지우는 타이머를 시작시킴.
+  3. 2초후 마우스를 다시 움직임.
+  4. if문 구절 때문에 3초짜리 showing을 지우는 타이머가 사라져 버리고, 
+  타이머 값이 null로 바뀜 즉 타이머 사라짐.
+  5.그대로 클래스 showing만들고 다시 또다른 3초짜리 showing을 
+  지우는 타이머 시작!
+ */
 
 const handleMouseLeave = () => {
   //마우스가 비디오 안에 있다면 UI를 숨기지 않는다
-  controlsTimeout = setTimeout(() => {
-    videoControls.classList.remove("show");
-  }, 2000);
+  controlsTimeout = setTimeout(hideControls, 2000);
 };
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadedmetadata", handleLoadedMetadata);
+video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
-timeline.addEventListener("change", handleTimelineChange);
+videoContainer.addEventListener("mousemove", handleMouseMove);
+videoContainer.addEventListener("mouseleave", handleMouseLeave);
+timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
-video.addEventListener("mousemove", handleMouseMove);
-video.addEventListener("mouseleave", handleMouseLeave);
+
 //loaded meta data
 //date constructor?
