@@ -4,12 +4,14 @@ const path = require("path");
 module.exports = {
   entry: {
     main: "./src/front-end/js/main.js",
-    videoPlayer: "./src/front-end/js/videoPlayer.js"}, //내가 변경하고자 하는 파일
+    videoPlayer: "./src/front-end/js/videoPlayer.js",
+    recorder: "./src/front-end/js/recorder.js",
+  }, //내가 변경하고자 하는 파일
   mode: "development",
   watch: true,
   plugins: [new MiniCssExtractPlugin({ filename: "css/style.css" })],
   output: {
-    filename: "js/[name].js", //여러 파일을 webpack에 넣을수 있다 [name] 
+    filename: "js/[name].js", //여러 파일을 webpack에 넣을수 있다 [name]
     path: path.resolve(__dirname, "assets"),
   },
   module: {
