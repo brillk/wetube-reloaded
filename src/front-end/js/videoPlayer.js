@@ -143,6 +143,13 @@ const clickToStop = () => {
   handlePlayClick();
 };
 
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -154,6 +161,8 @@ timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
 
 window.addEventListener("keydown", keyboardControl);
+
+video.addEventListener("ended", handleEnded); //비디오가 끝난 걸 감지한다
 video.addEventListener("click", clickToStop);
 //loaded meta data
 //date constructor?
