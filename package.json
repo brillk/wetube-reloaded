@@ -21,6 +21,8 @@
   "homepage": "https://github.com/brillk/wetube-reloaded#readme",
   "description": "",
   "dependencies": {
+    "@ffmpeg/core": "^0.10.0",
+    "@ffmpeg/ffmpeg": "^0.10.1",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "cross-fetch": "^3.1.5",

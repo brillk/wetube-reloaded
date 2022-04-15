@@ -1,3 +1,7 @@
+import "regenerator-runtime";
+
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+
 const startBtn = document.getElementById("startBtn");
 const video = document.getElementById("preview");
 
@@ -5,7 +9,18 @@ let stream;
 let recorder;
 let videoFile;
 
-const handleDownload = () => {
+const handleDownload = async () => {
+  const ffmpeg = createFFmpeg({
+    corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
+    log: true,
+  });
+  await ffmpeg.load();
+
+  //지금 프론트로 백엔드의 역할을 하고 있다
+  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
+
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+
   const a = document.createElement("a");
   a.href = videoFile;
   a.download = "MyRecording.webm";
@@ -15,7 +30,7 @@ const handleDownload = () => {
 
 const handleStop = () => {
   startBtn.innerText = "Download Recording"; //녹화를 껏다 켰다, 이벤트 리스너를 상호작용
-  startBtn.removeEventListener("click", handleStop);
+  startBtn.removeEventListener("click", handleStop); //이벤트가 겹치니까 오래된 이벤트를 먼저 없애준다
   startBtn.addEventListener("click", handleDownload);
   recorder.stop();
 };
@@ -33,6 +48,7 @@ const handleStart = () => {
     해당 URL은 자신을 생성한 창의 document가 사라지면 함께 무효화됩니다.
     */
     video.srcObject = null;
+    //비디오를 담고 있는 바이너리 데이터가 담겨있다
     video.src = videoFile;
     video.loop = true;
     video.play();
@@ -41,6 +57,7 @@ const handleStart = () => {
 };
 
 const init = async () => {
+  //동영상은 여기서부터 시작함
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
     video: true,

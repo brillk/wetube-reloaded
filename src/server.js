@@ -15,6 +15,12 @@ app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
 //세션은 서버에 들어갈 쿠키를 만들어 준다
 //쿠키안에는 여러가지가 들어 갈수 있지만,session Id라는 걸 생성한다
 app.use(
