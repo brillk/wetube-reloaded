@@ -18,9 +18,13 @@ const handleStart = () => {
   startBtn.removeEventListener("click", handleStart);
   startBtn.addEventListener("click", handleStop);
 
-  recorder = new MediaRecorder(stream);
+  recorder = new window.MediaRecorder(stream);
   recorder.ondataavailable = event => {
     const videoFile = URL.createObjectURL(event.data);
+    /*
+    URL.createObjectURL() 정적 메서드는 주어진 객체를 가리키는 URL을 DOMString으로 반환합니다. 
+    해당 URL은 자신을 생성한 창의 document가 사라지면 함께 무효화됩니다.
+    */
     video.srcObject = null;
     video.src = videoFile;
     video.loop = true;
