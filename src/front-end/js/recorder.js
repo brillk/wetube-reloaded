@@ -78,17 +78,12 @@ const handleDownload = async () => {
   actionBtn.addEventListener("click", handleStart);
 };
 
-const handleStop = () => {
-  actionBtn.innerText = "Download Recording"; //녹화를 껏다 켰다, 이벤트 리스너를 상호작용
-  actionBtn.removeEventListener("click", handleStop); //이벤트가 겹치니까 오래된 이벤트를 먼저 없애준다
-  actionBtn.addEventListener("click", handleDownload);
-  recorder.stop();
-};
-
+//녹화를 껏다 켰다, 이벤트 리스너를 상호작용
+//이벤트가 겹치니까 오래된 이벤트를 먼저 없애준다
 const handleStart = () => {
-  actionBtn.innerText = "Stop Recording";
+  actionBtn.innerText = "Recording";
+  actionBtn.disabled = true;
   actionBtn.removeEventListener("click", handleStart);
-  actionBtn.addEventListener("click", handleStop);
 
   recorder = new window.MediaRecorder(stream, { mimeType: "video/webm" });
   recorder.ondataavailable = event => {
@@ -102,15 +97,25 @@ const handleStart = () => {
     video.src = videoFile;
     video.loop = true;
     video.play();
+    
+    actionBtn.innerText = "Download";
+    actionBtn.disabled = false;
+    actionBtn.addEventListener("click", handleDownload);
   };
   recorder.start();
+  setTimeout(() => {
+    recorder.stop();
+  }, 3000);
 };
 
 const init = async () => {
   //동영상은 여기서부터 시작함
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: true,
+    video: {
+      width: 1024,
+      height: 576,
+    },
   });
   video.srcObject = stream;
   video.play();

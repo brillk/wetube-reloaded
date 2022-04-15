@@ -114,13 +114,14 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path.replace(/[\\]/g, "/"),
       owner: _id, //현재 로그인된 유저만 쓸수 있다
       //newVideo의 id를 User의 videos array에 추가해줄거다
       hashtags: Video.formatHashtags(hashtags),
@@ -208,7 +209,7 @@ export const registerView = async (req, res) => {
   }
   video.meta.views = video.meta.views + 1;
   video.save();
-  //백엔드 처리 탬플릿을 처리하지 않고,
+  //백엔드 처리 탬플릿을 하지 않고,
   //url도 바꾸지 않는 백엔드 처리
   return res.sendStatus(200); //front-end 호출
 };
