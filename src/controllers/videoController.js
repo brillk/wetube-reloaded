@@ -63,6 +63,7 @@ export const getEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   } // 영상 수정을 작성자만 이 url로 들어오게 한다
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not authorized");
     //type이 서로 달라 작동이 되지 않았다
     return res.status(403).redirect("/");
   }

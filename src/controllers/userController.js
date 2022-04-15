@@ -168,6 +168,7 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy();
+  req.flash("info", "Bye");
   return res.redirect("/");
 };
 
@@ -220,6 +221,7 @@ export const postEdit = async (req, res) => {
 export const getChangePassword = (req, res) => {
   // 1. login한 사람이라면 비밀번호를 보여주고 고치게 한다
   if (req.session.user.socialOnly === true) {
+    req.flash("error", "Can't change password");
     return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
@@ -258,7 +260,7 @@ export const postChangePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
-
+  req.flash("info", "Password Updated");
   //send notification to change password
   return res.redirect("/users/logout");
 };
@@ -285,8 +287,7 @@ export const see = async (req, res) => {
 
 */
 
-/*
-현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
+/*현재 DB에 업뎃이 된 값이 저장되었는데, 웹상으로 바뀌지 않는다 고쳐보자
 session은 로그인할때 한번만 저장된다. 그러니 값을 바꿔도 초기 값만 나온다
 session을 업데이트 해보자
 

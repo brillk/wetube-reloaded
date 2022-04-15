@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import usersRouter from "./routers/userRouter";
@@ -36,6 +37,7 @@ app.use(
   //Domain은 쿠키를 만드는 백엔드를 알려준다, 현재는 localhost
   //쿠키는 만료날짜가 명시되지 않으면, 창을 닫을 시 기본적으로 14일후 쿠키가 사라진다
 );
+
 /*
 1. 브라우져에서 서버에 로그인 요청, 로그인이 되면 서버는 세션id를 response해주고
 2. 브라우져는 쿠키스토리지에 그 세션id를 보관하고 있다가 이후 
@@ -43,6 +45,7 @@ app.use(
 
 4. 세션은 서버측에서 제공해주는 데이터, 
 5. 쿠키는 클라이언트측에서 저장하고 사용하는 데이터
+
 클라이언트가 해당 값을 쿠키에 저장하고 매 요청때마다 서버에게 전달
 세션은 서버가 만들어서 제공해주다보니 서버가 재부팅되면 초기화 된다. 
 (그래서 DB에 저장해서 관리를 한다는 소리. 실 운영에선 서버가 꺼지는 일은 없으니깐.)
@@ -51,14 +54,8 @@ app.use(
 서버가 세션을 생성한 기점은 middleware로 express-session을 추가했을때부터 생성됨.
 */
 
-/*
-local에 들어가서 값을 선언하고 pug파일에 #{선언된 값}을 
-쓰면 template와 pug의 합작품이 나온다
 
-res.locals.sexy = "Me";
-
-title = #{sexy}
-*/
+app.use(flash()); //flash는 session에 연결해서 메시지를 남긴다
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads")); //static files serving 활성화 <- 폴더를 브라우저에게 노출시키게 한다
 app.use("/static", express.static("assets")); // 파일을 공개적으로 돌린다
@@ -81,3 +78,6 @@ package.json이다 그러므로 현 디렉토리는 wetube가 되었고, 지금�
 app.use(express.urlencoded({ extended: true }));
 자바스크립트 object 형식으로 form이 body를 이해하도록 도운다
 */
+
+/*Express 애플리케이션용 플래시 메시지
+플래시는 플래시 메시지를 정의하고 요청을 리디렉션하지 않고 렌더링할 수 있는 기능이 있는 connect-flash의 확장입니다. */
