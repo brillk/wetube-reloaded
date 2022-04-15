@@ -3,8 +3,15 @@ const video = document.getElementById("preview");
 
 let stream;
 let recorder;
+let videoFile;
 
-const handleDownload = () => {};
+const handleDownload = () => {
+  const a = document.createElement("a");
+  a.href = videoFile;
+  a.download = "MyRecording.webm";
+  document.body.appendChild(a);
+  a.click();
+};
 
 const handleStop = () => {
   startBtn.innerText = "Download Recording"; //녹화를 껏다 켰다, 이벤트 리스너를 상호작용
@@ -18,9 +25,9 @@ const handleStart = () => {
   startBtn.removeEventListener("click", handleStart);
   startBtn.addEventListener("click", handleStop);
 
-  recorder = new window.MediaRecorder(stream);
+  recorder = new window.MediaRecorder(stream, { mimeType: "video/webm" });
   recorder.ondataavailable = event => {
-    const videoFile = URL.createObjectURL(event.data);
+    videoFile = URL.createObjectURL(event.data);
     /*
     URL.createObjectURL() 정적 메서드는 주어진 객체를 가리키는 URL을 DOMString으로 반환합니다. 
     해당 URL은 자신을 생성한 창의 document가 사라지면 함께 무효화됩니다.
