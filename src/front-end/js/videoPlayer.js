@@ -128,16 +128,20 @@ const handleMouseLeave = () => {
 };
 
 const keyboardControl = event => {
-  if (event.target !== textarea) {
+  if (event.target.tagName !== "TEXTAREA") {
     switch (event.keyCode) {
       case 32:
         handlePlayClick();
+        event.preventDefault();
         break;
       case 77:
         handleMuteClick();
+        event.preventDefault();
         break;
       case 70:
         handleFullScreen();
+        event.preventDefault();
+        break;
     }
   }
 };
