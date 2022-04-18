@@ -5,10 +5,10 @@ const BASE_JS = "./src/front-end/js/";
 
 module.exports = {
   entry: {
-    main: `${BASE_JS}main.js`,
-    videoPlayer: `${BASE_JS}videoPlayer.js`,
-    recorder: `${BASE_JS}recorder.js`,
-    comment: `${BASE_JS}commentSection.js`,
+    main: BASE_JS + "main.js",
+    videoPlayer: BASE_JS + "videoPlayer.js",
+    recorder: BASE_JS + "recorder.js",
+    comment: BASE_JS + "commentSection.js",
   }, //내가 변경하고자 하는 파일
   mode: "development",
   watch: true,

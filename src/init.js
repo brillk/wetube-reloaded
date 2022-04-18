@@ -2,6 +2,7 @@ import "dotenv/config"; //서버가 시작되는 곳에 env파일을 읽을 수 
 import "./db";
 import "./models/Video.js";
 import "./models/User.js";
+import "./models/Comment.js";
 import app from "./server";
 
 const PORT = 4000;

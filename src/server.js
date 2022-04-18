@@ -15,6 +15,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파일 디렉토리 설정
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
 
 app.use((req, res, next) => {
   res.header("Cross-Origin-Embedder-Policy", "require-corp");
