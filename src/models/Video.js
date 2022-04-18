@@ -12,6 +12,9 @@ const videoSchema = new mongoose.Schema({
     //extra data
     views: { type: Number, default: 0, required: true },
   },
+  comments: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
+  ], //유저한테도 보여져야 한다
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
 /*
