@@ -128,15 +128,17 @@ const handleMouseLeave = () => {
 };
 
 const keyboardControl = event => {
-  switch (event.keyCode) {
-    case 32:
-      handlePlayClick();
-      break;
-    case 77:
-      handleMuteClick();
-      break;
-    case 70:
-      handleFullScreen();
+  if (event.target !== textarea) {
+    switch (event.keyCode) {
+      case 32:
+        handlePlayClick();
+        break;
+      case 77:
+        handleMuteClick();
+        break;
+      case 70:
+        handleFullScreen();
+    }
   }
 };
 const clickToStop = () => {
