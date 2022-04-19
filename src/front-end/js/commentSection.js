@@ -9,10 +9,13 @@ const handleSubmit = event => {
   const videoId = videoContainer.dataset.id;
   fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
-    body: {
-      text, // video파트에서 POST만 해줘도 됐지만, 댓글은 정보가 담겼으니 body에서 꺼내온다
+    header: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({ text }),
+    // video파트에서 POST만 해줘도 됐지만, 댓글은 정보가 담겼으니 body에서 꺼내온다
   }); //비디오에 댓글을 남긴다
+  textarea.value = "";
 };
 
 if (form) {
