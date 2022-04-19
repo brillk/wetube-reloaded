@@ -1,6 +1,18 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
+const addComment = (text) => {
+  const videoComments = document.querySelector(".video__comments ul");
+  const newComment = document.createElement("li");
+  newComment.className = "video__comment";
+  const icon = document.createElement("i");
+  icon.className = "fas fa-comment";
+  const span = document.createElement("span");
+  span.innerText = ` ${text}`;
+  newComment.appendChild(icon);
+  newComment.appendChild(span);
+  videoComments.prepend(newComment);
+};
 const handleSubmit = async event => {
   event.preventDefault(); // 항상 하는 브라우저가 새로고침 후 값이 사라지는걸 방지
   const textarea = form.querySelector("textarea");
@@ -10,7 +22,7 @@ const handleSubmit = async event => {
   if (text === "") {
     return;
   }
-  await fetch(`/api/videos/${videoId}/comment`, {
+  const { status } = await fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,7 +31,9 @@ const handleSubmit = async event => {
     // video파트에서 POST만 해줘도 됐지만, 댓글은 정보가 담겼으니 body에서 꺼내온다
   }); //비디오에 댓글을 남긴다
   textarea.value = "";
-  window.location.reload(); //자동 새로고침
+  if (status === 201) {
+    addComment();
+  }
 };
 
 if (form) {
