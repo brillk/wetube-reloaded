@@ -8,6 +8,7 @@ import usersRouter from "./routers/userRouter";
 import videosRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares.js";
 import apiRouter from "./routers/apiRouter.js";
+
 const app = express();
 const logger = morgan("dev");
 
@@ -15,7 +16,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); // 디폴트로 실행되는 파일 디렉토리 설정
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
-app.use(express.text());
+app.use(express.json());
 
 app.use((req, res, next) => {
   res.header("Cross-Origin-Embedder-Policy", "require-corp");
@@ -31,10 +32,10 @@ app.use(
     resave: false, //방문하는 모든 사용자에게 쿠키를 주는게 아닌 로그인한 한정된 사람한테만 주자, 만약 만명이 한꺼번에 오는데 만개의 쿠키를 주면 서버터진다
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+  })
     //원래 session은 memoryStore에 있어서 새로고침하면 사라지는데,
     //현재 session은 mongodb daabase에 저장되어 있다
     //세션은 backend에 호출할떄만 만들어진다
-  })
   //Domain은 쿠키를 만드는 백엔드를 알려준다, 현재는 localhost
   //쿠키는 만료날짜가 명시되지 않으면, 창을 닫을 시 기본적으로 14일후 쿠키가 사라진다
 );

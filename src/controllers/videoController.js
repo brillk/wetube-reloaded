@@ -34,11 +34,12 @@ export const home = async (req, res) => {
     .populate("owner");
   return res.render("home", { pageTitle: "Home", videos });
 };
+
 export const watch = async (req, res) => {
   //upload를 하면 watch 를 부르기 때문에 오류가 난다
   //watch.pug를 수정
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id).populate("owner").populate("comments");
   /*
   Population은 문서의 지정된 경로를 다른 컬렉션의 문서로 
   자동 교체하는 프로세스입니다. 
@@ -234,5 +235,7 @@ export const createComment = async (req, res) => {
     owner: user._id,
     video: id,
   });
+  video.comments.push(comment._id); //video에 _id(from DB)글을 표시 from populate()"Comment"
+  video.save();
   return res.sendStatus(201);
 };
