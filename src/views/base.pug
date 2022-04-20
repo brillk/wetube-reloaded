@@ -1,23 +1,23 @@
 include mixins/message
 
-doctype html 
+doctype html
 html(lang="ko")
-    head 
+    head
         title #{pageTitle} | #{siteName}
-        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css")
-        link(rel="stylesheet", href="/static/css/style.css")
-    body 
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
+        link(rel="stylesheet", href="/static/css/styles.css")
+    body
         if messages.error
             +message("error", messages.error)
         if messages.info
             +message("info", messages.info)
         if messages.success
             +message("sucess", messages.success)
-        include partials/header.pug
+        include partials/header                
         main
-            block content 
-        include partials/footer.pug
-    script(scr="/static/js/main.js")
+            block content
+        include partials/footer
+    script(src="/static/js/main.js") 
     block scripts
 //- block이란 개념은 템플릿의 창문처럼 생각하면 된다  
 //-무엇이든 집어넣을 수 있는 공간 

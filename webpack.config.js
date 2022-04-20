@@ -9,13 +9,18 @@ module.exports = {
     videoPlayer: BASE_JS + "videoPlayer.js",
     recorder: BASE_JS + "recorder.js",
     commentSection: BASE_JS + "commentSection.js",
-  }, //내가 변경하고자 하는 파일
+  },
   mode: "development",
   watch: true,
-  plugins: [new MiniCssExtractPlugin({ filename: "css/style.css" })],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "css/styles.css",
+    }),
+  ],
   output: {
-    filename: "js/[name].js", //여러 파일을 webpack에 넣을수 있다 [name]
+    filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),
+    clean: true,
   },
   module: {
     rules: [
@@ -35,7 +40,6 @@ module.exports = {
     ],
   },
 };
-
 /*
 1. webpack의 rules 내부의 'test: /\.scss$/,' 코드에서 모든 scss파일들을 긁어온다
 

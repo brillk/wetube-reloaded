@@ -1,6 +1,6 @@
-extends base.pug
+extends base
 
-block content 
+block content
     div#videoContainer(data-id=video._id)
         video(src="/" + video.fileUrl)
         div#videoControls.videoControls
@@ -19,7 +19,7 @@ block content
             div
                 span#fullScreen
                     i.fas.fa-expand
-    
+
     div.video__data
         p.video__title=video.title
         small.video__owner Uploaded by 
@@ -30,21 +30,20 @@ block content
             br
             a(href=`${video.id}/delete`) Delete Video &rarr;
     if loggedIn
-        div.video__add__comments
+        div.video__add-comments
             form.video__comment-form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a nice commment...")
                 button Add Comment
     div.video__comments
         ul
             each comment in video.comments.reverse()
-                li.video__comment
-                    i.fas.fa-comment 
-                    span #{comment.text}
-
-
+                li.video__comment(data-id=comment.id)
+                    i.fas.fa-comment
+                    span  #{comment.text}
+                    span ❌ 
 block scripts
     script(src="/static/js/videoPlayer.js")
     if loggedIn
         script(src="/static/js/commentSection.js") 
 //- 영상을 올린 사람과 로그인한 사람의 아이디가 같다면 Edit, Delete를 보여준다
-//-    작성자 이름을 누르면 프로필로 이동 및 비디오를 보여준다
+//- 작성자 이름을 누르면 프로필로 이동 및 비디오를 보여준다

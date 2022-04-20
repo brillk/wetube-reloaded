@@ -1,22 +1,21 @@
 import mongoose from "mongoose";
 
-//make schema 모델의 생김새 만들기
 const videoSchema = new mongoose.Schema({
-  title: { type: String, required: true, trim: true, maxLenth: 80 },
+  title: { type: String, required: true, trim: true, maxLength: 80 },
   fileUrl: { type: String, required: true },
   thumbUrl: { type: String, required: true },
-  description: { type: String, required: true, trim: true, maxLength: 20 },
+  description: { type: String, required: true, trim: true, minLength: 2 },
   createdAt: { type: Date, required: true, default: Date.now },
   hashtags: [{ type: String, trim: true }],
   meta: {
-    //extra data
     views: { type: Number, default: 0, required: true },
   },
   comments: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
-  ], //유저한테도 보여져야 한다
+  ],
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
+
 /*
   지금 유저와 비디오가 접점이 없다 따라서 id를 이용해 둘을 엮어보자
   user에는 업로드한 모든 영상과 id를 저장

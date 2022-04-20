@@ -161,21 +161,15 @@ export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   const {
     user: { _id },
-  } = req.session; //사용자의 id
+  } = req.session;
   const video = await Video.findById(id);
-  //userdb에 남아있는 videos도 삭제
-  const user = await User.findById(_id);
-
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
-
   if (String(video.owner) !== String(_id)) {
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndDelete(id);
-  user.videos.splice(user.videos.indexOf(id), 1);
-  user.save();
   return res.redirect("/");
 };
 
@@ -237,5 +231,5 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id); //video에 _id(from DB)글을 표시 from populate()"Comment"
   video.save();
-  return res.sendStatus(201);
+  return res.status(201).json({ newCommentId: comment._id });
 };
