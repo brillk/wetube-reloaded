@@ -17,6 +17,9 @@ const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 
+const comment = document.getElementById("comment");
+const deleteComment = document.getElementById("deleteComment");
+
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
 let volumeValue = 0.5;
@@ -156,6 +159,13 @@ const handleEnded = () => {
   });
 };
 
+const handleDelComment = () => {
+  const { id } = comment.id;
+  fetch(`/api/comment/${id}/delete`, {
+    method: "DELETE",
+  });
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -170,6 +180,7 @@ window.addEventListener("keydown", keyboardControl);
 
 video.addEventListener("ended", handleEnded); //비디오가 끝난 걸 감지한다
 video.addEventListener("click", clickToStop);
+
 //loaded meta data
 //date constructor?
 

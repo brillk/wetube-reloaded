@@ -215,7 +215,7 @@ export const postEdit = async (req, res) => {
 
   req.session.user = updatedUser;
 
-  return res.redirect("/users/edit");
+  return res.redirect(`/users/${_id}`);
 };
 
 export const getChangePassword = (req, res) => {
@@ -291,7 +291,7 @@ export const see = async (req, res) => {
 session은 로그인할때 한번만 저장된다. 그러니 값을 바꿔도 초기 값만 나온다
 session을 업데이트 해보자
 
- req.params are the variables in a URL.
+req.params are the variables in a URL.
 /movies/:id can be found in req.params.id
 
 req.query is the data on the query of the URL
