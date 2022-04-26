@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node build/init.js",
+    "build:server": "babel src -d build",
     "dev:server": "nodemon",
     "dev:assets": "webpack"
   },
@@ -38,7 +40,8 @@
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.8",
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.2.4",
