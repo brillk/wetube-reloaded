@@ -1,4 +1,18 @@
 import multer from "multer";
+import multerS3 from "multer-s3";
+import aws from "aws-sdk";
+
+const s3 = new aws.S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  },
+});
+
+const multerUploaded = multerS3({
+  s3: s3,
+  bucket: "wetube-created-by-kjh",
+});
 
 export const localsMiddleware = (req, res, next) => {
   //loggedIn이 true, false인지 확인
@@ -35,6 +49,7 @@ export const avatarUpload = multer({
   limits: {
     fileSize: 3000000,
   },
+  storage: multerUploaded,
 });
 
 export const videoUpload = multer({
@@ -42,4 +57,7 @@ export const videoUpload = multer({
   limits: {
     fileSize: Infinity, // byte?
   },
+  storage: multerUploaded,
 });
+
+//서버에 저장할수 있게 됐다
